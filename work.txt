@@ -1,0 +1,27 @@
+Date:16/09/2024
+1.Tasks Completed:
+ ->Knowledge about Git and Github.
+ ->Apply validation to all forms on the frontend side, and convert the API calls to use the call method.
+ ->Send Mail Functionality Add on News App.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today
+
+4.Next Steps/Plan for Tomorrow:
+
+Date:18/09/2024
+1.Tasks Completed:
+ ->Create Project Task-Management-System.
+ ->Add Functionality Create User with Mail Send And crud Operation In Task-Management-System.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Mail Send To Set Url To Password Change.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
