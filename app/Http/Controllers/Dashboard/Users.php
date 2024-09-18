@@ -165,8 +165,9 @@ class Users extends Controller
             'password' => 'required|min:6',
             'confirm_password'=>'required|same:password'
         ]);
-
-        $user = dbusers::where('email', Session::get('email'))->first();
+        $userEmail = $request->input('email');
+        
+        $user = dbusers::where('email', $userEmail)->first();
         if (!$user) {
             return redirect()->back()->with('error', 'User not found.');
         }
