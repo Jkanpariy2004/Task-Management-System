@@ -145,7 +145,7 @@ class Users extends Controller
         $recipientEmail = $request->email;
         $username = $recipientEmail;
         // $username = urlencode($recipientEmail);
-        $passwordCreationUrl = url('/password-creation-form?user=' . $username); 
+        $passwordCreationUrl = url('/password-creation-form?user=' . $username);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
         Session::put('email', $username);
@@ -166,9 +166,9 @@ class Users extends Controller
             'confirm_password'=>'required|same:password'
         ]);
 
-        $user = dbusers::where('email', Session::get('email'))->first(); 
+        $user = dbusers::where('email', Session::get('email'))->first();
         if (!$user) {
-            return redirect()->back()->with('error', 'User not found.'); 
+            return redirect()->back()->with('error', 'User not found.');
         }
 
         $user->password = bcrypt($request->input('password'));
