@@ -57,17 +57,6 @@ Route::post('/users-update/{id}',[Users::class,'UserUpdate'])->name('users.updat
 Route::post('/send-invitation', [Users::class, 'sendInvitation']);
 Route::get('/password-creation-form', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
 // Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
 Route::post('/password-creation', [Users::class, 'store']);
 Route::post('/bulk-delete-users', [Users::class, 'bulkDelete']);
 
