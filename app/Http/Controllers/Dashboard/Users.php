@@ -5,27 +5,43 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Mail\InvitationMail;
 use App\Models\Users as dbusers;
+use App\Models\Company as dbcompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class Users extends Controller
 {
     public function index()
     {
+        if (!Session::has('email')) {
+            return redirect('/admin')->with('error', 'Please login to access this page.');
+        }
+        
         return view('Dashboard.Users');
     }
 
     public function AddUsers()
     {
-        return view('Dashboard.Add-Users');
+        if (!Session::has('email')) {
+            return redirect('/admin')->with('error', 'Please login to access this page.');
+        }
+        
+        $companys = dbcompany::all();
+        return view('Dashboard.Add-Users',compact('companys'));
     }
 
     public function FetchUsers()
     {
-        $users = dbusers::all();
-
+        // $users = dbusers::all();
+        $users = DB::table('user')
+            ->leftJoin('company', 'user.company', '=', 'company.id')
+            ->select('user.*', 'company.c_name')
+            ->get();
         return response()->json([
             'users' => $users,
         ]);
@@ -35,12 +51,13 @@ class Users extends Controller
     {
         $message = [
             'name.required' => 'Please Enter User Name.',
-            'email.required' => 'Please Enter User Name.,',
-            'mobile.required' => 'Please Enter User Name.',
+            'email.required' => 'Please Enter User Email.,',
+            'mobile.required' => 'Please Enter User Mobile.',
             'mobile.digits' => 'Please Enter Valid 10 digits Mobile No.',
-            'designation.required' => 'Please Enter User Name.',
-            'joining_date.required' => 'Please Enter User Name.',
-            'birth_date.required' => 'Please Enter User Name.',
+            'designation.required' => 'Please Enter User designation.',
+            'joining_date.required' => 'Please Enter User Joining Date.',
+            'birth_date.required' => 'Please Enter User Birth date.',
+            'company.required' => 'Please Select User Company Name.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -50,6 +67,7 @@ class Users extends Controller
             'designation' => 'required',
             'joining_date' => 'required',
             'birth_date' => 'required',
+            'company' => 'required',
         ], $message);
 
         if ($validator->fails()) {
@@ -63,6 +81,7 @@ class Users extends Controller
         $user->designation = $request->input('designation');
         $user->joining_date = $request->input('joining_date');
         $user->birth_date = $request->input('birth_date');
+        $user->company = $request->input('company');
 
         $user->save();
 
@@ -73,12 +92,13 @@ class Users extends Controller
     {
         $message = [
             'name.required' => 'Please Enter User Name.',
-            'email.required' => 'Please Enter User Name.,',
-            'mobile.required' => 'Please Enter User Name.',
+            'email.required' => 'Please Enter User Email.,',
+            'mobile.required' => 'Please Enter User Mobile.',
             'mobile.digits' => 'Please Enter Valid 10 digits Mobile No.',
-            'designation.required' => 'Please Enter User Name.',
-            'joining_date.required' => 'Please Enter User Name.',
-            'birth_date.required' => 'Please Enter User Name.',
+            'designation.required' => 'Please Enter User designation.',
+            'joining_date.required' => 'Please Enter User Joining Date.',
+            'birth_date.required' => 'Please Enter User Birth date.',
+            'company.required' => 'Please Select User Company Name.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -88,6 +108,7 @@ class Users extends Controller
             'designation' => 'required',
             'joining_date' => 'required',
             'birth_date' => 'required',
+            'company' => 'required',
         ], $message);
 
         if ($validator->fails()) {
@@ -109,10 +130,15 @@ class Users extends Controller
 
     public function edit($id)
     {
+        if (!Session::has('email')) {
+            return redirect('/admin')->with('error', 'Please login to access this page.');
+        }
+            
+        $companys = dbcompany::all();
         $show = dbusers::all();
         $new = dbusers::find($id);
         $url = url('/users-update/' . $id);
-        $com = compact('show', 'new', 'url');
+        $com = compact('show', 'new', 'url','companys');
         return view('Dashboard.User_edit', $com);
     }
 
@@ -145,10 +171,19 @@ class Users extends Controller
         $recipientEmail = $request->email;
         $username = $recipientEmail;
         // $username = urlencode($recipientEmail);
-        $passwordCreationUrl = url('/password-creation-form?user=' . $username);
+        $token = Str::random(60);
+
+        $user = dbusers::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Email not found in the database.'], 404);
+        }
+
+        $user->token = $token;
+        $user->save();
+        $passwordCreationUrl = url('/password-creation-form?token='.$token); 
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
-        Session::put('email', $username);
 
         return response()->json(['success' => 'Email sent successfully.']);
     }
@@ -156,25 +191,32 @@ class Users extends Controller
     public function showPasswordCreationForm(Request $request)
     {
         $user = $request->query('user');
-        return view('Dashboard.PasswordCreationForm', compact('user'));
+        $token = $request->query('token');
+
+        return view('Dashboard.PasswordCreationForm', compact('user','token'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'password' => 'required|min:6',
-            'confirm_password'=>'required|same:password'
+            'confirm_password' => 'required|same:password',
+            'token' => 'required' 
         ]);
-        $userEmail = $request->input('email');
+
+        $token = $request->input('token');
         
-        $user = dbusers::where('email', $userEmail)->first();
+        $user = dbusers::where('token', $token)->first();
+        
         if (!$user) {
             return redirect()->back()->with('error', 'User not found.');
         }
 
         $user->password = bcrypt($request->input('password'));
+        $user->token = NULL;
         $user->save();
-        Session::flush();
-        return redirect()->back()->with('success', 'Password created successfully!');
+
+        return redirect()->back()->with('success', 'Password Created successfully!');
     }
+
 }

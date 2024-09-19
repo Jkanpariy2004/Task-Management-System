@@ -1,20 +1,15 @@
 <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
 <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="/assets/css/demo.css" />
-<style>
-    td{
-        width: 11% !important;
-    }
-</style>
 
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 
-        @include('Layouts.Sidenavbar')
+        @include('Dashboard.Layouts.Sidenavbar')
 
         <div class="layout-page">
 
-            @include('Layouts.header')
+            @include('Dashboard.Layouts.header')
 
             <div class="content-wrapper">
 
@@ -50,6 +45,7 @@
                                             <th class="text-center">Email</th>
                                             <th class="text-center">Mobile</th>
                                             <th class="text-center">Designation</th>
+                                            <th class="text-center">Compnay Name</th>
                                             <th class="text-center">Joining Date</th>
                                             <th class="text-center">Birth Date</th>
                                             <th class="text-center">Action</th>
@@ -99,6 +95,7 @@
                                                             item.email,
                                                             item.mobile,
                                                             item.designation,
+                                                            item.c_name,
                                                             item.joining_date,
                                                             item.birth_date,
                                                             `<div>
@@ -108,8 +105,8 @@
                                                                 <a class="btn btn-sm btn-icon item-delete" href="#" data-id="${item.id}">
                                                                     <i class="text-danger ti ti-trash"></i>
                                                                 </a>
-                                                                <a class="btn btn-sm btn-icon item-mail" href="#" data-email="${item.email}">
-                                                                    <i class="text-success ti ti-mail"></i>
+                                                                <a class="btn btn-primary item-mail" href="#" data-email="${item.email}">
+                                                                    Send Invitation
                                                                 </a>
                                                             </div>`
                                                         ]);
@@ -152,7 +149,7 @@
                                                                                 Swal.fire({
                                                                                     icon: 'success',
                                                                                     title: 'Deleted!',
-                                                                                    text: 'The post has been deleted.',
+                                                                                    text: 'The User has been deleted.',
                                                                                     confirmButtonText: 'OK'
                                                                                 })
                                                                                 .then(() => {
@@ -164,7 +161,7 @@
                                                                                 Swal.fire({
                                                                                     icon: 'error',
                                                                                     title: 'Error!',
-                                                                                    text: 'An error occurred while deleting the post.',
+                                                                                    text: 'An error occurred while deleting the User.',
                                                                                     confirmButtonText: 'OK'
                                                                                 });
                                                                             }
@@ -306,7 +303,7 @@
                 </div>
                 <!-- / Content -->
 
-                @include('Layouts.footer')
+                @include('Dashboard.Layouts.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>

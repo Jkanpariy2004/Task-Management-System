@@ -12,7 +12,7 @@ class Login extends Controller
 {
     public function index()
     {
-        return view('Login.Login');
+        return view('Dashboard.Login.Login');
     }
 
     public function LoginCheck(Request $request)
@@ -37,6 +37,12 @@ class Login extends Controller
             return response()->json(['success' => 'Login Successful. Redirecting....'], 200);
         }
 
-        return response()->json(['errors' => 'Please Enter Valid email or password.'], 422);
+        return response()->json(['errors' => 'Please Enter Valid email or password.'], 400);
+    }
+
+    public function logout(){
+        Session::flush();
+
+        return redirect('/admin')->with('success', 'Logout Successfully.');
     }
 }

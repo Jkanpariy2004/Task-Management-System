@@ -7,11 +7,11 @@
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 
-        @include('Layouts.Sidenavbar')
+        @include('Dashboard.Layouts.Sidenavbar')
 
         <div class="layout-page">
 
-            @include('Layouts.header')
+            @include('Dashboard.Layouts.header')
 
 
             <div class="content-wrapper">
@@ -55,6 +55,18 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="company" class="form-label">Company</label>
+                                        <select class="form-select" id="company" name="company">
+                                        <option value="" hidden>Select Post Category</option>
+                                            @foreach ($companys as $company)
+                                                <option value="{{ $company->id }}">
+                                                    {{ $company->c_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <button type="submit" class="btn btn-primary w-100">Add User</button>
                                     </div>
                                 </form>
@@ -63,7 +75,7 @@
                     </div>
                 </div>
 
-                @include('Layouts.footer')
+                @include('Dashboard.Layouts.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>

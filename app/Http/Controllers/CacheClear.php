@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Session;
 class CacheClear extends Controller
 {
     public function index(){
+        if (!Session::has('email')) {
+            return redirect('/admin')->with('error', 'Please login to access this page.');
+        }
+        
         return view('Dashboard.cache');
     }
     public function clearCache()

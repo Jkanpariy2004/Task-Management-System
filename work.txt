@@ -8,7 +8,7 @@ Date:16/09/2024
  ->No Ongoing Task.
 
 3.Challenges Faced:
- ->No challenge faced today
+ ->No challenge faced today.
 
 4.Next Steps/Plan for Tomorrow:
 
@@ -22,6 +22,21 @@ Date:18/09/2024
 
 3.Challenges Faced:
  ->Mail Send To Set Url To Password Change.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:19/09/2024
+1.Tasks Completed:
+ ->Craete Company Funcationality With Crud Operation in Task Management System.
+ ->Create Task Funcationality & User Task Assign Funcationality in Task Management System.
+ ->Create User Login And User Dashboard Page in Task Management system.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
 
 4.Next Steps/Plan for Tomorrow:
  ->

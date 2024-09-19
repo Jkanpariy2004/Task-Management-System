@@ -6,12 +6,12 @@
       <div class="layout-container">
         <!-- Menu -->
 
-        @include('Layouts.Sidenavbar')
+        @include('Dashboard.Layouts.Sidenavbar')
         <!-- / Menu -->
 
         <!-- Layout container -->
         <div class="layout-page">
-        @include('Layouts.header')
+        @include('Dashboard.Layouts.header')
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
@@ -894,7 +894,7 @@
             </div>
             <!-- / Content -->
 
-            @include('Layouts.footer')
+            @include('Dashboard.Layouts.footer')
 
             <div class="content-backdrop fade"></div>
           </div>

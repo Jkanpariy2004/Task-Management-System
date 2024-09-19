@@ -6,14 +6,14 @@
     <div class="layout-container">
         <!-- Menu -->
 
-        @include('Layouts.Sidenavbar')
+        @include('Dashboard.Layouts.Sidenavbar')
         <!-- / Menu -->
 
         <!-- Layout container -->
         <div class="layout-page">
             <!-- Navbar -->
 
-            @include('Layouts.header')
+            @include('Dashboard.Layouts.header')
 
             <!-- / Navbar -->
 
@@ -113,7 +113,7 @@
                 </div>
                 <!-- / Content -->
 
-                @include('Layouts.footer')
+                @include('Dashboard.Layouts.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>

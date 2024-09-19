@@ -7,11 +7,11 @@
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 
-        @include('Layouts.Sidenavbar')
+        @include('Dashboard.Layouts.Sidenavbar')
 
         <div class="layout-page">
 
-            @include('Layouts.header')
+            @include('Dashboard.Layouts.header')
 
             <div class="content-wrapper">
 
@@ -37,20 +37,36 @@
                                         <input type="text" class="form-control" name="mobile" id="mobile" value="{{ $new->mobile }}" placeholder="Enter User Mobile" />
                                         <div class="invalid-feedback" id="mobile-error"></div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">User designation</label>
                                         <input type="text" class="form-control" name="designation" value="{{ $new->designation }}" id="designation" placeholder="Enter User designation" />
                                         <div class="invalid-feedback" id="designation-error"></div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="joining_date" class="form-label">User Joining Date</label>
                                         <input type="text" class="form-control" name="joining_date" value="{{ $new->joining_date }}" placeholder="DD-MM-YYYY" id="joining_date" />
                                         <div class="invalid-feedback" id="joining_date-error"></div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="birth_date" class="form-label">User Birth Date</label>
                                         <input type="text" class="form-control" name="birth_date" value="{{ $new->birth_date }}" placeholder="DD-MM-YYYY" id="birth_date" />
                                         <div class="invalid-feedback" id="birth_date-error"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="company" class="form-label">Company</label>
+                                        <select class="form-select" id="company" name="company">
+                                        <option value="" hidden>Select Post Category</option>
+                                            @foreach ($companys as $company)
+                                                <option value="{{ $company->id }}"
+                                                    {{ $new->company == $company->id ? 'selected' : '' }}>
+                                                    {{ $company->c_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
@@ -62,7 +78,7 @@
                     </div>
                 </div>
 
-                @include('Layouts.footer')
+                @include('Dashboard.Layouts.footer')
 
                 <div class="content-backdrop fade"></div>
             </div>
