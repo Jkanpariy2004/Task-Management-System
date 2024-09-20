@@ -40,3 +40,16 @@ Date:19/09/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:20/09/2024
+1.Tasks Completed:
+ ->User Assign Task Show In Card And Apply All Condition In User Task Details.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Apply Condition To Show User Task Data.
+
+4.Next Steps/Plan for Tomorrow:
+ ->

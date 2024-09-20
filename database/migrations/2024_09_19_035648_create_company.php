@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('c_name',50);
             $table->string('c_email',50);
             $table->string('c_phone_no',50);
-            $table->string('c_address',50);
+            $table->text('c_address');
             $table->string('city',50);
             $table->string('country',50);
             $table->timestamps();

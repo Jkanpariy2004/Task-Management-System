@@ -39,7 +39,7 @@ class Task extends Controller
         return view('Dashboard.Add-Task',compact('users'));
     }
 
-    public function SubmitTask(Request $request){
+    public function SubmitTask(Request $request) {
         $message = [
             'task_title.required' => 'Please Enter Task Title.',
             'task_description.required' => 'Please Enter Task Description.',
@@ -52,8 +52,8 @@ class Task extends Controller
         $validator = Validator::make($request->all(), [
             'task_title' => 'required',
             'task_description' => 'required',
-            'start_date' => 'required',
-            'due_date' => 'required',
+            'start_date' => 'nullable',
+            'due_date' => 'nullable',
             'assign' => 'required',
             'priority' => 'required'
         ], $message);
@@ -62,25 +62,29 @@ class Task extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        
         $task = new dbtask();
         $task->title = $request->input('task_title');
         $task->description = $request->input('task_description');
         $task->start_date = $request->input('start_date');
         $task->due_date = $request->input('due_date');
         $task->priority = $request->input('priority');
-        
-        $task->save();
     
-        $assign_task = new dbassign_task();
-        $assign_task->task_id = $task->id;
-        $assign_task->user_id = $request->input('assign');
-        
-        $assign_task->save();
+        if ($task->save()) {
+            $assign_task = new dbassign_task();
+            $assign_task->task_id = $task->id;
+            $assign_task->user_id = $request->input('assign');
     
-        return response()->json(['message' => 'Task created & Assigned successfully!'], 200);
+            if ($assign_task->save()) {
+                return response()->json(['message' => 'Task created & assigned successfully!'], 200);
+            } else {
+                $task->delete(); 
+                return response()->json(['message' => 'Task assignment failed!'], 500);
+            }
+        }
+    
+        return response()->json(['message' => 'Task creation failed!'], 500);
     }
-    
+        
 
     public function TaskUpdate(Request $request , $id){
         $message = [
@@ -95,8 +99,8 @@ class Task extends Controller
         $validator = Validator::make($request->all(), [
             'task_title' => 'required',
             'task_description' => 'required',
-            'start_date' => 'required',
-            'due_date' => 'required',
+            'start_date' => 'nullable',
+            'due_date' => 'nullable',
             'assign' => 'required',
             'priority' => 'required',
         ], $message);
@@ -110,12 +114,22 @@ class Task extends Controller
         $task->description = $request->input('task_description');
         $task->start_date = $request->input('start_date');
         $task->due_date = $request->input('due_date');
-        $task->assign = $request->input('assign');
         $task->priority = $request->input('priority');
+    
+        if ($task->save()) {
+            $assign_task = dbassign_task::find($id);
+            $assign_task->task_id = $task->id;
+            $assign_task->user_id = $request->input('assign');
+    
+            if ($assign_task->save()) {
+                return response()->json(['message' => 'Task Updated & assigned successfully!'], 200);
+            } else {
+                $task->delete(); 
+                return response()->json(['message' => 'Task assignment failed!'], 500);
+            }
+        }
 
-        $task->save();
-
-        return response()->json(['message' => 'Task Updated successfully!'], 200);
+        return response()->json(['message' => 'Task creation failed!'], 500);
     }
 
     public function edit($id)
@@ -123,11 +137,17 @@ class Task extends Controller
         if (!Session::has('email')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-            
+
+        $users = dbusers::all();
         $show = dbtask::all();
         $new = dbtask::find($id);
+
+        // Fetch the assigned task user ID
+        $assignedTask = dbassign_task::where('task_id', $id)->first();
+        $assignedUserId = $assignedTask ? $assignedTask->user_id : null;
+
         $url = url('/users-update/' . $id);
-        $com = compact('show', 'new', 'url');
+        $com = compact('show', 'new', 'url', 'users', 'assignedUserId');
         return view('Dashboard.Task_edit', $com);
     }
 

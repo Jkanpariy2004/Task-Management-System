@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Login\Login;
+use App\Http\Controllers\Dashboard\Login\Login;
 use App\Http\Controllers\Dashboard\Index;
 use App\Http\Controllers\Dashboard\Users;
 use App\Http\Controllers\Dashboard\Company;
 use App\Http\Controllers\Dashboard\Task;
 use App\Http\Controllers\CacheClear;
-use App\Http\Controllers\UserDashboard\UserLogin;
+use App\Http\Controllers\UserDashboard\Login\UserLogin;
 use App\Http\Controllers\UserDashboard\Home;
 
 /*
@@ -56,6 +56,7 @@ Route::get('/users-edit/{id}',[Users::class,'edit']);
 Route::post('/users-update/{id}',[Users::class,'UserUpdate'])->name('users.update');
 Route::post('/send-invitation', [Users::class, 'sendInvitation']);
 Route::get('/password-creation-form', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
+// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
 Route::post('/password-creation', [Users::class, 'store']);
 Route::post('/bulk-delete-users', [Users::class, 'bulkDelete']);
 

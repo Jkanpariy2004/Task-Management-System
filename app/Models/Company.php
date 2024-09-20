@@ -16,5 +16,5 @@ class Company extends Model
         'c_address',
         'city',
         'country'
-    ];  
+    ]; 
 }

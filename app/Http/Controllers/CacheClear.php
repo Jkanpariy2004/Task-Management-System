@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Artisan;
 
 class CacheClear extends Controller
 {
     public function index(){
         if (!Session::has('email')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
+            return redirect('/')->with('error', 'Please login to access this page.');
         }
         
         return view('Dashboard.cache');

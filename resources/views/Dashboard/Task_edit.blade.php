@@ -25,10 +25,11 @@
                                     @csrf
                                     <div class="mb-3">
                                         <label for="task_title" class="form-label">Task Title</label>
-                                        <input type="text" class="form-control" name="task_title" id="task_title" value="{{ $new->title }}" placeholder="Enter Task Title" />
+                                        <input type="text" class="form-control" name="task_title" id="task_title"
+                                            value="{{ $new->title }}" placeholder="Enter Task Title" />
                                         <div class="invalid-feedback" id="task_title-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="task_description" class="form-label">Task Description</label>
                                         <textarea id="task_description" name="task_description" class="form-control" placeholder="Enter Post Description">{{ $new->description }}</textarea>
@@ -37,13 +38,15 @@
 
                                     <div class="mb-3">
                                         <label for="start_date" class="form-label">Start Date</label>
-                                        <input type="text" class="form-control" name="start_date" value="{{ $new->start_date }}" placeholder="DD-MM-YYYY" id="start_date" />
+                                        <input type="text" class="form-control" name="start_date"
+                                            value="{{ $new->start_date }}" placeholder="DD-MM-YYYY" id="start_date" />
                                         <div class="invalid-feedback" id="start_date-error"></div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="due_date" class="form-label">Due Date</label>
-                                        <input type="text" class="form-control" name="due_date" value="{{ $new->due_date }}" placeholder="DD-MM-YYYY" id="due_date" />
+                                        <input type="text" class="form-control" name="due_date"
+                                            value="{{ $new->due_date }}" placeholder="DD-MM-YYYY" id="due_date" />
                                         <div class="invalid-feedback" id="due_date-error"></div>
                                     </div>
 
@@ -51,7 +54,12 @@
                                         <label for="assign" class="form-label">Assign</label>
                                         <select class="form-select" id="assign" name="assign">
                                             <option value="" hidden>Select Assign User</option>
-                                            <option value="User" {{ $new->assign == 'User' ? 'selected' : '' }}>User</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}"
+                                                    {{ $assignedUserId == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                         <div class="invalid-feedback" id="assign-error"></div>
                                     </div>
@@ -60,10 +68,17 @@
                                         <label for="priority" class="form-label">Priority</label>
                                         <select class="form-select" id="priority" name="priority">
                                             <option value="" hidden>Select Task Priority</option>
-                                            <option value="Urgent" {{ $new->priority == 'Urgent' ? 'selected' : '' }}>Urgent</option>
-                                            <option value="High Priority" {{ $new->priority == 'High Priority' ? 'selected' : '' }}>High Priority</option>
-                                            <option value="Normal Priority" {{ $new->priority == 'Normal Priority' ? 'selected' : '' }}>Normal Priority</option>
-                                            <option value="Low Priority" {{ $new->priority == 'Low Priority' ? 'selected' : '' }}>Low Priority</option>
+                                            <option value="Urgent" {{ $new->priority == 'Urgent' ? 'selected' : '' }}>
+                                                Urgent</option>
+                                            <option value="High Priority"
+                                                {{ $new->priority == 'High Priority' ? 'selected' : '' }}>High Priority
+                                            </option>
+                                            <option value="Normal Priority"
+                                                {{ $new->priority == 'Normal Priority' ? 'selected' : '' }}>Normal
+                                                Priority</option>
+                                            <option value="Low Priority"
+                                                {{ $new->priority == 'Low Priority' ? 'selected' : '' }}>Low Priority
+                                            </option>
                                         </select>
                                         <div class="invalid-feedback" id="priority-error"></div>
                                     </div>
@@ -149,7 +164,7 @@
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: '{{ route("task.update", $new->id) }}',
+                    url: '{{ route('task.update', $new->id) }}',
                     type: 'POST',
                     data: formData,
                     processData: false,
