@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\Task;
 use App\Http\Controllers\CacheClear;
 use App\Http\Controllers\UserDashboard\Login\UserLogin;
 use App\Http\Controllers\UserDashboard\Home;
+use App\Http\Controllers\UserDashboard\Comment;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,3 +89,6 @@ Route::get('/task-delete/{id}',[Task::class,'TaskDelete'])->name('task.delete');
 Route::post('/bulk-delete-task', [Task::class, 'bulkDelete']);
 Route::get('/task-edit/{id}',[Task::class,'edit']);
 Route::post('/task-update/{id}',[Task::class,'TaskUpdate'])->name('task.update');
+Route::get('/comments/{post_id}', [Comment::class, 'fetch'])->name('comments.fetch');
+Route::post('/comments/store', [Comment::class, 'store'])->name('comments.store');
+Route::delete('/comments/{id}/delete', [Comment::class, 'destroy']);

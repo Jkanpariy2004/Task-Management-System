@@ -53,3 +53,17 @@ Date:20/09/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:21/09/2024
+1.Tasks Completed:
+ ->Assign Task Add Attechments in Task Management System.
+ ->Task Details Show Add Comment Admin & User Side.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Send And Show Comment User & Admin Side.
+
+4.Next Steps/Plan for Tomorrow:
+ ->

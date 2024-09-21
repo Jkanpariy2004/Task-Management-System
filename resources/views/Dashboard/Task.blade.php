@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
 <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="/assets/css/demo.css" />
+<style>
+    td .model-dialog{
+        text-align: left !important;
+    }
+</style>
 
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -46,6 +51,7 @@
                                             <th class="text-center">Start Date</th>
                                             <th class="text-center">Due Date</th>
                                             <th class="text-center">Priority</th>
+                                            <th class="text-center">Comment</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -94,6 +100,9 @@
                                                             item.start_date,
                                                             item.due_date,
                                                             item.priority,
+                                                            `
+                                                            <button class="btn btn-primary">Comment</button>
+                                                            `,
                                                             `<div>
                                                                 <a href="/task-edit/${item.id}" class="btn btn-sm btn-icon item-edit">
                                                                     <i class="text-primary ti ti-pencil"></i>
@@ -166,6 +175,7 @@
                                                     });
                                                 }
                                             });
+
 
                                             $('#select-all').on('click', function() {
                                                 const isChecked = $(this).prop('checked');

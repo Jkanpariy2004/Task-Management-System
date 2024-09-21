@@ -1,6 +1,27 @@
 <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
 <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="/assets/css/demo.css" />
+<style>
+    #attechments_preview img {
+        width: 150px;
+        margin: 10px;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    #attechments_preview img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .remove-image {
+        cursor: pointer;
+        display: block;
+        margin-top: 5px;
+        color: red;
+    }
+
+</style>
 <!-- Add Flatpickr CSS -->
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" /> -->
 <!-- Layout wrapper -->
@@ -75,6 +96,107 @@
                                             <div class="invalid-feedback" id="priority-error"></div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="mb-3 col-12">
+                                        <label for="attechments" class="form-label">Select Attechments Files</label>
+                                            <div id="other_drop_zone" class="border-dashed p-5 text-center" style="border: 2px dashed gray; border-radius: 10px; cursor: pointer;">
+                                                <i class="fas fa-images fa-3x mb-3" style="color: #8e54e9; font-size: 10rem;"></i>
+                                                <p>Drag & Drop your images here or click anywhere to select files</p>
+                                                <div id="other_file_name" class="mt-2"></div>
+                                                <div id="attechments_preview" class="mt-3 text-center"></div>
+                                            </div>
+                                            <input type="file" class="form-control d-none" id="attechments" name="attechments[]" accept="image/*" multiple>
+                                        </div>
+                                        <script>
+                                            let oldImages = [];
+
+                                            document.getElementById('other_drop_zone').addEventListener('click', function(event) {
+                                                if (!event.target.classList.contains('remove-image')) {
+                                                    document.getElementById('attechments').click();
+                                                }
+                                            });
+
+                                            const previewContainer = document.getElementById('attechments_preview');
+                                            const fileInput = document.getElementById('attechments');
+
+                                            function displayOldImages() {
+                                                oldImages.forEach((imgData, index) => {
+                                                    const preview = document.createElement('div');
+                                                    preview.classList.add('preview-image');
+
+                                                    const img = document.createElement('img');
+                                                    img.src = imgData.src;
+                                                    img.alt = imgData.name;
+
+                                                    const removeBtn = document.createElement('span');
+                                                    removeBtn.innerText = 'Remove';
+                                                    removeBtn.classList.add('remove-image');
+                                                    removeBtn.addEventListener('click', function() {
+                                                        oldImages.splice(index, 1);
+                                                        preview.remove();
+                                                    });
+
+                                                    preview.appendChild(img);
+                                                    preview.appendChild(removeBtn);
+                                                    previewContainer.appendChild(preview);
+                                                });
+                                            }
+
+                                            fileInput.addEventListener('change', function(event) {
+                                                const files = event.target.files;
+
+                                                const newPreviewStartIndex = oldImages.length;
+                                                
+                                                Array.from(previewContainer.querySelectorAll('.new-upload')).forEach((element) => {
+                                                    element.remove();
+                                                });
+
+                                                Array.from(files).forEach((file, index) => {
+                                                    const reader = new FileReader();
+                                                    reader.onload = function(e) {
+                                                        const preview = document.createElement('div');
+                                                        preview.classList.add('preview-image', 'new-upload');
+
+                                                        const img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.alt = file.name;
+
+                                                        const removeBtn = document.createElement('span');
+                                                        removeBtn.innerText = 'Remove';
+                                                        removeBtn.classList.add('remove-image');
+                                                        removeBtn.addEventListener('click', function() {
+                                                            removeFile(index + newPreviewStartIndex, preview);
+                                                        });
+
+                                                        preview.appendChild(img);
+                                                        preview.appendChild(removeBtn);
+                                                        previewContainer.appendChild(preview);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                });
+                                            });
+
+                                            function removeFile(index, previewElement) {
+                                                const dt = new DataTransfer();
+                                                const { files } = fileInput;
+
+                                                Array.from(files).forEach((file, i) => {
+                                                    if (i !== (index - oldImages.length)) {
+                                                        dt.items.add(file);
+                                                    }
+                                                });
+
+                                                fileInput.files = dt.files; 
+                                                fileInput.dispatchEvent(new Event('change')); 
+
+                                                previewElement.remove();
+                                            }
+
+                                            displayOldImages();
+                                        </script>
+
+
+                                    </div>
 
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Create Task</button>
@@ -125,19 +247,19 @@
                 isValid = false;
             }
 
-            var start_date = $('#start_date').val();
-            if (start_date.trim() === '') {
-                $('#start_date').addClass('is-invalid');
-                $('#start_date-error').text('Start date is required');
-                isValid = false;
-            }
+            // var start_date = $('#start_date').val();
+            // if (start_date.trim() === '') {
+            //     $('#start_date').addClass('is-invalid');
+            //     $('#start_date-error').text('Start date is required');
+            //     isValid = false;
+            // }
 
-            var due_date = $('#due_date').val();
-            if (due_date === '') {
-                $('#due_date').addClass('is-invalid');
-                $('#due_date-error').text('Due date is required');
-                isValid = false;
-            }
+            // var due_date = $('#due_date').val();
+            // if (due_date === '') {
+            //     $('#due_date').addClass('is-invalid');
+            //     $('#due_date-error').text('Due date is required');
+            //     isValid = false;
+            // }
 
             var assign = $('#assign').val();
             if (assign === '') {

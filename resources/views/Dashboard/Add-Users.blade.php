@@ -57,7 +57,7 @@
                                     <div class="mb-3">
                                         <label for="company" class="form-label">Company</label>
                                         <select class="form-select" id="company" name="company">
-                                        <option value="" hidden>Select Company</option>
+                                        <option value="" hidden>Select Users Company</option>
                                             @foreach ($companys as $company)
                                                 <option value="{{ $company->id }}">
                                                     {{ $company->c_name }}

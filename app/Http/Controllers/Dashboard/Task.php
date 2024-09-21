@@ -6,41 +6,114 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\Users as dbusers;
 use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
 
 class Task extends Controller
 {
-    public function index()
-    {
+    public function index(){
         if (!Session::has('email')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-
+        
         return view('Dashboard.Task');
     }
 
     public function FetchTask()
     {
         $tasks = dbtask::all();
-
+        
         return response()->json([
             'tasks' => $tasks,
         ]);
     }
-
+    
     public function AddTask()
     {
         if (!Session::has('email')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-
+        
         $users = dbusers::all();
-        return view('Dashboard.Add-Task', compact('users'));
+        return view('Dashboard.Add-Task',compact('users'));
     }
 
-    public function SubmitTask(Request $request)
+    public function SubmitTask(Request $request) {
+        $message = [
+            'task_title.required' => 'Please Enter Task Title.',
+            'task_description.required' => 'Please Enter Task Description.',
+            'start_date.required' => 'Please Select Task Start Date.',
+            'due_date.required' => 'Please Select Task Due Date.',
+            'assign.required' => 'Please Select Task Assign User.',
+            'priority.required' => 'Please Select Task Priority.',
+        ];
+    
+        $validator = Validator::make($request->all(), [
+            'task_title' => 'required',
+            'task_description' => 'required',
+            'start_date' => 'nullable',
+            'due_date' => 'nullable',
+            'assign' => 'required',
+            'priority' => 'required',
+            'attechments' => 'required|array|max:30',
+            'attechments.*' => 'mimes:jpeg,png,jpg,pdf|max:20480'
+        ], $message);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $task = new dbtask();
+        $task->title = $request->input('task_title');
+        $task->description = $request->input('task_description');
+        $task->start_date = $request->input('start_date');
+        $task->due_date = $request->input('due_date');
+        $task->priority = $request->input('priority');
+    
+        if ($request->hasFile('attechments')) {
+            $otherImages = $request->file('attechments');
+            $imageNames = [];
+            $errorMessages = [];
+    
+            $sanitizedTitle = preg_replace('/[^a-zA-Z0-9-_\.]/', '_', strtolower($task->title));
+    
+            foreach ($otherImages as $index => $image) {
+                $imageNameOther = $sanitizedTitle . '_' . ($index + 1) . '.' . $image->getClientOriginalExtension();
+                if ($image->isValid()) {
+                    $image->move(public_path('assets/Task-Attechments'), $imageNameOther);
+                    $imageNames[] = $imageNameOther;
+                } else {
+                    $errorMessages[] = "The attachment '{$imageNameOther}' failed to upload.";
+                }
+            }
+    
+            if (!empty($errorMessages)) {
+                return response()->json(['errors' => $errorMessages], 422);
+            }
+    
+            $task->attechments = json_encode($imageNames);
+        }        
+    
+        if ($task->save()) {
+            $assign_task = new dbassign_task();
+            $assign_task->task_id = $task->id;
+            $assign_task->user_id = $request->input('assign');
+    
+            if ($assign_task->save()) {
+                return response()->json(['message' => 'Task created & assigned successfully!'], 200);
+            } else {
+                $task->delete(); 
+                return response()->json(['message' => 'Task assignment failed!'], 500);
+            }
+        }
+    
+        return response()->json(['message' => 'Task creation failed!'], 500);
+    }
+    
+    public function TaskUpdate(Request $request, $id)
     {
         $message = [
             'task_title.required' => 'Please Enter Task Title.',
@@ -57,55 +130,9 @@ class Task extends Controller
             'start_date' => 'nullable',
             'due_date' => 'nullable',
             'assign' => 'required',
-            'priority' => 'required'
-        ], $message);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $task = new dbtask();
-        $task->title = $request->input('task_title');
-        $task->description = $request->input('task_description');
-        $task->start_date = $request->input('start_date');
-        $task->due_date = $request->input('due_date');
-        $task->priority = $request->input('priority');
-
-        if ($task->save()) {
-            $assign_task = new dbassign_task();
-            $assign_task->task_id = $task->id;
-            $assign_task->user_id = $request->input('assign');
-
-            if ($assign_task->save()) {
-                return response()->json(['message' => 'Task created & assigned successfully!'], 200);
-            } else {
-                $task->delete();
-                return response()->json(['message' => 'Task assignment failed!'], 500);
-            }
-        }
-
-        return response()->json(['message' => 'Task creation failed!'], 500);
-    }
-
-
-    public function TaskUpdate(Request $request, $id)
-    {
-        $message = [
-            'task_title.required' => 'Please Enter Task Title.',
-            'task_description.required' => 'Please Enter Task Description.,',
-            'start_date.required' => 'Please Select Task Start Date.',
-            'due_date.required' => 'Please Select Task Due Date.',
-            'assign.required' => 'Please Select Task Assign User.',
-            'priority.required' => 'Please Select Task Priority.',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'task_title' => 'required',
-            'task_description' => 'required',
-            'start_date' => 'nullable',
-            'due_date' => 'nullable',
-            'assign' => 'required',
             'priority' => 'required',
+            'attechments' => 'nullable|array|max:30',
+            'attechments.*' => 'mimes:jpeg,png,jpg,pdf|max:20480',
         ], $message);
 
         if ($validator->fails()) {
@@ -118,6 +145,31 @@ class Task extends Controller
         $task->start_date = $request->input('start_date');
         $task->due_date = $request->input('due_date');
         $task->priority = $request->input('priority');
+
+        $existingAttachments = json_decode($task->attechments, true) ?? [];
+        $removedAttachments = explode(',', $request->input('removed_attachments'));
+
+        foreach ($removedAttachments as $attachment) {
+            if (($key = array_search($attachment, $existingAttachments)) !== false) {
+                unlink(public_path('assets/Task-Attechments/' . $attachment));
+                unset($existingAttachments[$key]);
+            }
+        }
+
+        $sanitizedTitle = preg_replace('/[^a-zA-Z0-9-_\.]/', '_', strtolower($task->title));
+
+        if ($request->hasFile('attechments')) {
+            $otherImages = $request->file('attechments');
+            foreach ($otherImages as $index => $image) {
+                $imageNameOther = $sanitizedTitle . '_' . ($index + 1) . '.' . $image->getClientOriginalExtension();
+                if ($image->isValid()) {
+                    $image->move(public_path('assets/Task-Attechments'), $imageNameOther);
+                    $existingAttachments[] = $imageNameOther;
+                }
+            }
+        }
+
+        $task->attechments = json_encode(array_values($existingAttachments));
 
         if ($task->save()) {
             $assign_task = dbassign_task::find($id);
@@ -132,8 +184,9 @@ class Task extends Controller
             }
         }
 
-        return response()->json(['message' => 'Task creation failed!'], 500);
+        return response()->json(['message' => 'Task Update failed!'], 500);
     }
+
 
     public function edit($id)
     {
@@ -145,12 +198,13 @@ class Task extends Controller
         $show = dbtask::all();
         $new = dbtask::find($id);
 
-        // Fetch the assigned task user ID
         $assignedTask = dbassign_task::where('task_id', $id)->first();
         $assignedUserId = $assignedTask ? $assignedTask->user_id : null;
 
+        $existingAttachments = json_decode($new->attechments, true);
+
         $url = url('/users-update/' . $id);
-        $com = compact('show', 'new', 'url', 'users', 'assignedUserId');
+        $com = compact('show', 'new', 'url', 'users', 'assignedUserId', 'existingAttachments');
         return view('Dashboard.Task_edit', $com);
     }
 

@@ -14,11 +14,15 @@ class Home extends Controller
 {
     public function index()
     {
+        if (!Session::has('email')) {
+            return redirect('/user')->with('error', 'Please login to access this page.');
+        }
+
         $userEmail = Session::get('email');
         
         $userData = DB::table('user')
-        ->where('email', $userEmail)
-        ->first();
+            ->where('email', $userEmail)
+            ->first();
         
         if ($userData) {
             $user = DB::table('user')
@@ -35,12 +39,16 @@ class Home extends Controller
         $UserId = $userData->id;
         $UserTaskData = dbassign_task::where('user_id', $UserId)->pluck('task_id');
 
-        $TaskData = dbtask::whereIn('id', $UserTaskData)->get();
+        $TaskData = dbtask::whereIn('id', $UserTaskData)->get()->map(function ($task) {
+            $task->attachments = json_decode($task->attechments); 
+            return $task;
+        });
+
         $TaskDate = dbtask::whereIn('id', $UserTaskData)->first();
 
         $date = \Carbon\Carbon::now()->format('d-m-Y');
 
-        $todayTask= $TaskData->where('due_date', '==', $date);
+        $todayTask = $TaskData->where('due_date', '==', $date);
         $todayTasksCount = $todayTask->count();
 
         $dueTasks = $TaskData->where('due_date', '<', $date)->whereNotNull('due_date');
@@ -48,18 +56,23 @@ class Home extends Controller
 
         $NextTasks = $TaskData->filter(function ($task) use ($date) {
             return $task->start_date > $date || $task->due_date > $date;
-        });                                                                                                     
+        });
         $NextTasksCount = $NextTasks->count(); 
 
         $UnscheduledTask = $TaskData->filter(function ($task) use ($date) {
-            return ($task->start_date == Null && $task->due_date == Null) ;
+            return ($task->start_date == null && $task->due_date == null);
         });
         $UnscheduledCount = $UnscheduledTask->count();
+        $users = DB::table('comments')
+            ->leftJoin('user', 'comments.user_id', '=', 'user.id')
+            ->select('comments.*', 'user.name')
+            ->first();
 
-        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user','TaskDate','date','todayTask','todayTasksCount','dueTasks','dueTasksCount','NextTasks','NextTasksCount','UnscheduledTask','UnscheduledCount');
+        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount','users');
         
         return view('UserDashboard.User-Dashboard', $data);
     }
+
 
     public function FetchUserTask()
     {
