@@ -2,8 +2,45 @@
 <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="/assets/css/demo.css" />
 <style>
-    td .model-dialog{
+    td .model-dialog {
         text-align: left !important;
+    }
+
+    .comment-section {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .comments-display {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+
+    .comment-input {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        padding: 20px;
+    }
+
+    .comment {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+
+    .comment-author {
+        font-weight: bold;
+    }
+
+    .comment-time {
+        font-size: 0.9em;
+        color: #777;
     }
 </style>
 
@@ -101,7 +138,36 @@
                                                             item.due_date,
                                                             item.priority,
                                                             `
-                                                            <button class="btn btn-primary">Comment</button>
+                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-${item.id}">
+                                                                Comments
+                                                            </button>
+
+                                                            <div class="modal fade" id="exampleModal-${item.id}" tabindex="-1" aria-labelledby="exampleModalLabel-${item.id}" aria-hidden="true">
+                                                                <div class="modal-dialog modal-xl">
+                                                                    <div class="modal-content h-50">
+                                                                        <div class="modal-header">
+                                                                            <h1 class="modal-title fs-5" id="exampleModalLabel-${item.id}">Comments</h1>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body text-start">
+                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
+                                                                                
+                                                                            </div>
+                                                                            <form action="/comments/store" method="POST" class="mt-3">
+                                                                                @csrf
+                                                                                <div class="comment-input d-flex gap-3">
+                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
+                                                                                    @error('comment_text')
+                                                                                        {{ $message }}
+                                                                                    @enderror
+                                                                                    <input type="hidden" id="postId" value="${item.id}" name="post_id">
+                                                                                    <button type="submit" class="btn btn-primary">Send</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             `,
                                                             `<div>
                                                                 <a href="/task-edit/${item.id}" class="btn btn-sm btn-icon item-edit">
@@ -113,6 +179,7 @@
                                                             </div>`
                                                         ]);
                                                     });
+
 
                                                     $('#example').DataTable({
                                                         data: tableData,
@@ -147,19 +214,44 @@
                                                                             data: {
                                                                                 _token: '{{ csrf_token() }}'
                                                                             },
-                                                                            success: function(response) {
+                                                                            success: function(
+                                                                                response
+                                                                            ) {
                                                                                 Swal.fire({
-                                                                                    icon: 'success',
-                                                                                    title: 'Deleted!',
-                                                                                    text: 'The Task has been deleted.',
-                                                                                    confirmButtonText: 'OK'
-                                                                                })
-                                                                                .then(() => {
-                                                                                    $('#example').DataTable().row($(event.target).closest('tr')).remove().draw();
-                                                                                });
+                                                                                        icon: 'success',
+                                                                                        title: 'Deleted!',
+                                                                                        text: 'The Task has been deleted.',
+                                                                                        confirmButtonText: 'OK'
+                                                                                    })
+                                                                                    .then(
+                                                                                        () => {
+                                                                                            $('#example')
+                                                                                                .DataTable()
+                                                                                                .row(
+                                                                                                    $(event
+                                                                                                        .target
+                                                                                                    )
+                                                                                                    .closest(
+                                                                                                        'tr'
+                                                                                                    )
+                                                                                                )
+                                                                                                .remove()
+                                                                                                .draw();
+                                                                                        }
+                                                                                    );
                                                                             },
-                                                                            error: function(xhr,status,error) {
-                                                                                console.error('Error deleting post:',xhr,status,error);
+                                                                            error: function(
+                                                                                xhr,
+                                                                                status,
+                                                                                error
+                                                                            ) {
+                                                                                console
+                                                                                    .error(
+                                                                                        'Error deleting post:',
+                                                                                        xhr,
+                                                                                        status,
+                                                                                        error
+                                                                                    );
                                                                                 Swal.fire({
                                                                                     icon: 'error',
                                                                                     title: 'Error!',
@@ -175,7 +267,6 @@
                                                     });
                                                 }
                                             });
-
 
                                             $('#select-all').on('click', function() {
                                                 const isChecked = $(this).prop('checked');
@@ -223,13 +314,21 @@
                                                                     text: 'Selected items have been deleted.',
                                                                     confirmButtonText: 'OK'
                                                                 }).then(() => {
-                                                                    var table = $('#example').DataTable();
-                                                                    selectedIds.forEach(function(id) {
-                                                                        table.row($(`input[data-id="${id}"]`).closest('tr')).remove();
+                                                                    var table = $('#example')
+                                                                        .DataTable();
+                                                                    selectedIds.forEach(function(
+                                                                        id) {
+                                                                        table.row($(
+                                                                                    `input[data-id="${id}"]`
+                                                                                )
+                                                                                .closest(
+                                                                                    'tr'))
+                                                                            .remove();
                                                                     });
                                                                     table.draw();
 
-                                                                    $('#select-all').prop('checked',false);
+                                                                    $('#select-all').prop('checked',
+                                                                        false);
                                                                 });
                                                             },
                                                             error: function(xhr, status, error) {
