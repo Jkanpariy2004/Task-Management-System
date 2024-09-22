@@ -33,7 +33,7 @@ class Login extends Controller
         $user = admin::where('email', $credentials['email'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
-            Session::put('email', $credentials['email']);
+            Session::put('adminemail', $credentials['email']);
             return response()->json(['success' => 'Login Successful. Redirecting....'], 200);
         }
 

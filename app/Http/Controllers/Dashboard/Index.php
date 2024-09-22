@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 class Index extends Controller
 {
     public function index(){
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         

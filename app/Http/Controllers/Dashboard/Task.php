@@ -15,7 +15,7 @@ use App\Models\Assign_Task as dbassign_task;
 class Task extends Controller
 {
     public function index(){
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -33,7 +33,7 @@ class Task extends Controller
     
     public function AddTask()
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -190,7 +190,7 @@ class Task extends Controller
 
     public function edit($id)
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
 

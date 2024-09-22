@@ -18,7 +18,7 @@ class Users extends Controller
 {
     public function index()
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -27,7 +27,7 @@ class Users extends Controller
 
     public function AddUsers()
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -130,7 +130,7 @@ class Users extends Controller
 
     public function edit($id)
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
             

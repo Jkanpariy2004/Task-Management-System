@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 class Company extends Controller
 {
     public function index(){
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -29,7 +29,7 @@ class Company extends Controller
     
     public function AddCompany()
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
@@ -74,7 +74,7 @@ class Company extends Controller
 
     public function edit($id)
     {
-        if (!Session::has('email')) {
+        if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
         
