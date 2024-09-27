@@ -67,3 +67,47 @@ Date:21/09/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:22/09/2024
+1.Tasks Completed:
+ ->Error Solve In Comment User & Admin Side In Task Management System.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Send And Show Comment User & Admin Side.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:25/09/2024
+1.Tasks Completed:
+ ->Knowledge about CPanel.
+ ->Knowledge about How To Upload Project On CPanel.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:26/09/2024
+1.Tasks Completed:
+ ->Error Solve In Comment User & Admin Side In Task Management System.
+ ->Send Whatsapp Message Using Twilio.
+ ->Send Text Message Using Twilio.
+ ->Mail Send Using Markdown Method.
+ ->Pdf Generate & Send In Mail.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->

@@ -66,6 +66,10 @@
         color: #777;
     }
 
+    .comments-list {
+        max-height: 500px;
+        overflow-y: auto; 
+    }
 
 </style>
 
@@ -233,17 +237,19 @@
                                                                                                 <p class="m-0 p-0">{{ $task->description }}</p>
                                                                                             </div>
                                                                                             <div>
-                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}"><i class="fa-solid fa-link"></i>Attecments</h5>
+                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}">
+                                                                                                    <i class="fa-solid fa-link"></i> Attachments
+                                                                                                </h5>
                                                                                                 @if(!empty($task->attachments))
                                                                                                     <ul class="list-unstyled">
                                                                                                         @foreach($task->attachments as $attachment)
                                                                                                             <li class="mb-2">
                                                                                                                 @if(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                                                                                    <a href="#" onclick="TodayshowImage('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         <img src="{{ asset('assets/Task-Attechments/' . $attachment) }}" alt="{{ $attachment }}" style="width: 100px; height: auto;">
                                                                                                                     </a>
                                                                                                                 @elseif(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['pdf']))
-                                                                                                                    <a href="#" onclick="TodayshowPDF('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         {{ $attachment }}
                                                                                                                     </a>
                                                                                                                 @endif
@@ -253,131 +259,81 @@
                                                                                                 @else
                                                                                                     <p>No attachments available.</p>
                                                                                                 @endif
-                                                                                                <div id="TodayimagePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="TodayclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <img id="TodaypopupImage" src="" alt="" style="max-width:90%; max-height:90%;">
-                                                                                                </div>
-
-                                                                                                <div id="TodaypdfPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="TodayclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <iframe id="TodaypopupPDF" src="" style="width:90%; height:90%;"></iframe>
-                                                                                                </div>
-
-                                                                                                <script>
-                                                                                                    function TodayshowImage(src) {
-                                                                                                        document.getElementById('TodaypopupImage').src = src;
-                                                                                                        document.getElementById('TodayimagePopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function TodayshowPDF(src) {
-                                                                                                        document.getElementById('TodaypopupPDF').src = src;
-                                                                                                        document.getElementById('TodaypdfPopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function TodayclosePopup() {
-                                                                                                        document.getElementById('TodayimagePopup').style.display = 'none';
-                                                                                                        document.getElementById('TodaypdfPopup').style.display = 'none';
-                                                                                                    }
-                                                                                                </script>
                                                                                             </div>
+
                                                                                         </div>
 
                                                                                         <div class="comment-section w-50 d-flex flex-column justify-content-between">
-                                                                                            <?php 
-                                                                                                $comments = DB::table('comments')->where('post_id', $task->id)->orderBy('created_at', 'asc')->get();
-                                                                                            ?>
                                                                                             <h3>Comments</h3>
 
-                                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
+                                                                                            <div id="commentList-{{ $task->id }}" class="comments-list overflow-auto" style="flex-grow: 1; overflow-x: auto;">
                                                                                                 @if($comments->isNotEmpty())
-                                                                                                <ul>
-                                                                                                    @foreach($comments as $comment)
-                                                                                                        <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                            <strong>{{ $users->name ?? 'Anonymous' }} (User):</strong> 
-                                                                                                            {{ $comment->comment_text }} 
-                                                                                                            <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
-                                                                                                            <button class="btn btn-danger btn-sm delete-comment" data-comment-id="{{ $comment->id }}">Delete</button>
-                                                                                                        </li>
-                                                                                                    @endforeach
-                                                                                                </ul>
-
+                                                                                                    <ul>
+                                                                                                        @foreach($comments as $comment)
+                                                                                                            <li class="mb-2" data-comment-id="{{ $comment->id }}">
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
+                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
+                                                                                                            </li>
+                                                                                                        @endforeach
+                                                                                                    </ul>
                                                                                                 @endif
                                                                                             </div>
 
-                                                                                            <form id="commentForm" action="javascript:void(0);" method="POST" class="mt-3">
+                                                                                            <form class="commentForm" data-post-id="{{ $task->id }}">
                                                                                                 @csrf
                                                                                                 <div class="comment-input d-flex gap-3">
-                                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
-                                                                                                    <input type="hidden" id="postId" value="{{ $task->id }}" name="post_id">
+                                                                                                    <input name="comment_text" class="form-control" placeholder="Leave a comment..." required />
+                                                                                                    <input type="hidden" name="post_id" value="{{ $task->id }}">
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
+                                                                                            
+                                                                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
-                                                                                                document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                                                                                    event.preventDefault();
+                                                                                                $(document).ready(function() {
+                                                                                                    $('.commentForm').off('submit').on('submit', function (event) {
+                                                                                                        event.preventDefault();
+                                                                                                        const postId = $(this).data('post-id');
+                                                                                                        const form = $(this);
+                                                                                                        const commentText = form.find('input[name="comment_text"]').val();
+                                                                                                        const submitButton = form.find('button[type="submit"]');
 
-                                                                                                    let commentText = document.getElementById('commentText').value;
-                                                                                                    let postId = document.getElementById('postId').value;
-                                                                                                    let token = document.querySelector('input[name="_token"]').value;
+                                                                                                        submitButton.prop('disabled', true);
 
-                                                                                                    fetch('/comments/store', {
-                                                                                                        method: 'POST',
-                                                                                                        headers: {
-                                                                                                            'Content-Type': 'application/json',
-                                                                                                            'X-CSRF-TOKEN': token
-                                                                                                        },
-                                                                                                        body: JSON.stringify({
-                                                                                                            comment_text: commentText,
-                                                                                                            post_id: postId
-                                                                                                        })
-                                                                                                    })
-                                                                                                    .then(response => response.json())
-                                                                                                    .then(data => {
-                                                                                                        if (data.success) {
-                                                                                                            let commentList = document.getElementById('commentList').querySelector('ul'); 
-                                                                                                            let newComment = `<li class="mb-2">
-                                                                                                                <strong>${data.user.name}(User):</strong> 
-                                                                                                                ${data.comment.comment_text} 
-                                                                                                                <small>${new Date(data.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
-                                                                                                            </li>`;
-                                                                                                            commentList.insertAdjacentHTML('beforeend', newComment); 
+                                                                                                        $.ajax({
+                                                                                                            url: '/comments-store',
+                                                                                                            method: 'POST',
+                                                                                                            data: form.serialize(),
+                                                                                                            success: function (response) {
+                                                                                                                let newComment = `
+                                                                                                                    <li class="mb-2">
+                                                                                                                        <strong>${response.comment.user_id}:</strong> 
+                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
+                                                                                                                    </li>`;
 
-                                                                                                            document.getElementById('commentText').value = ''; 
-                                                                                                        } else {
-                                                                                                            alert('Failed to post comment');
-                                                                                                        }
-                                                                                                    })
-                                                                                                    .catch(error => console.log('Error:', error));
+                                                                                                                $(`#commentList-${response.comment.post_id}`).append(newComment);
 
-                                                                                                });
-
-                                                                                                document.querySelectorAll('.delete-comment').forEach(button => {
-                                                                                                    button.addEventListener('click', function() {
-                                                                                                        let commentId = this.getAttribute('data-comment-id');
-                                                                                                        let token = document.querySelector('input[name="_token"]').value;
-
-                                                                                                        if (confirm('Are you sure you want to delete this comment?')) {
-                                                                                                            fetch(`/comments/${commentId}/delete`, {
-                                                                                                                method: 'DELETE',
-                                                                                                                headers: {
-                                                                                                                    'Content-Type': 'application/json',
-                                                                                                                    'X-CSRF-TOKEN': token
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .then(response => response.json())
-                                                                                                            .then(data => {
-                                                                                                                if (data.success) {
-                                                                                                                    document.querySelector(`li[data-comment-id="${commentId}"]`).remove();
-                                                                                                                } else {
-                                                                                                                    alert('Failed to delete comment');
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .catch(error => console.log('Error:', error));
-                                                                                                        }
+                                                                                                                form.find('input[name="comment_text"]').val('');
+                                                                                                            },
+                                                                                                            error: function (xhr, status, error) {
+                                                                                                                Swal.fire({
+                                                                                                                    icon: 'error',
+                                                                                                                    title: 'Error!',
+                                                                                                                    text: 'Failed to post the comment.',
+                                                                                                                    confirmButtonText: 'OK'
+                                                                                                                });
+                                                                                                            },
+                                                                                                            complete: function() {
+                                                                                                                submitButton.prop('disabled', false);
+                                                                                                            }
+                                                                                                        });
                                                                                                     });
                                                                                                 });
                                                                                             </script>
                                                                                         </div>
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="modal-footer">
@@ -517,18 +473,19 @@
                                                                                                 <p class="m-0 p-0">{{ $task->description }}</p>
                                                                                             </div>
                                                                                             <div>
-                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}"><i class="fa-solid fa-link"></i>Attecments</h5>
-                                                                                                <div class="attachments-files">
+                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}">
+                                                                                                    <i class="fa-solid fa-link"></i> Attachments
+                                                                                                </h5>
                                                                                                 @if(!empty($task->attachments))
                                                                                                     <ul class="list-unstyled">
                                                                                                         @foreach($task->attachments as $attachment)
                                                                                                             <li class="mb-2">
                                                                                                                 @if(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                                                                                    <a href="#" onclick="OverdueshowImage('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         <img src="{{ asset('assets/Task-Attechments/' . $attachment) }}" alt="{{ $attachment }}" style="width: 100px; height: auto;">
                                                                                                                     </a>
                                                                                                                 @elseif(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['pdf']))
-                                                                                                                    <a href="#" onclick="OverdueshowPDF('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         {{ $attachment }}
                                                                                                                     </a>
                                                                                                                 @endif
@@ -538,131 +495,79 @@
                                                                                                 @else
                                                                                                     <p>No attachments available.</p>
                                                                                                 @endif
-                                                                                                <div id="OverdueimagePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="OverdueclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <img id="OverduepopupImage" src="" alt="" style="max-width:90%; max-height:90%;">
-                                                                                                </div>
-
-                                                                                                <div id="OverduepdfPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="OverdueclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <iframe id="OverduepopupPDF" src="" style="width:90%; height:90%;"></iframe>
-                                                                                                </div>
-
-                                                                                                <script>
-                                                                                                    function OverdueshowImage(src) {
-                                                                                                        document.getElementById('OverduepopupImage').src = src;
-                                                                                                        document.getElementById('OverdueimagePopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function OverdueshowPDF(src) {
-                                                                                                        document.getElementById('OverduepopupPDF').src = src;
-                                                                                                        document.getElementById('OverduepdfPopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function OverdueclosePopup() {
-                                                                                                        document.getElementById('OverdueimagePopup').style.display = 'none';
-                                                                                                        document.getElementById('OverduepdfPopup').style.display = 'none';
-                                                                                                    }
-                                                                                                </script>
-                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="comment-section w-50 d-flex flex-column justify-content-between">
-                                                                                            <?php 
-                                                                                                $comments = DB::table('comments')->where('post_id', $task->id)->orderBy('created_at', 'asc')->get();
-                                                                                            ?>
                                                                                             <h3>Comments</h3>
 
-                                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
+                                                                                            <div id="commentList-{{ $task->id }}" class="comments-list overflow-auto" style="flex-grow: 1; overflow-x: auto;">
                                                                                                 @if($comments->isNotEmpty())
-                                                                                                <ul>
-                                                                                                    @foreach($comments as $comment)
-                                                                                                        <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                            <strong>{{ $users->name ?? 'Anonymous' }} (User):</strong> 
-                                                                                                            {{ $comment->comment_text }} 
-                                                                                                            <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
-                                                                                                            <button class="btn btn-danger btn-sm delete-comment" data-comment-id="{{ $comment->id }}">Delete</button>
-                                                                                                        </li>
-                                                                                                    @endforeach
-                                                                                                </ul>
-
+                                                                                                    <ul>
+                                                                                                        @foreach($comments as $comment)
+                                                                                                            <li class="mb-2" data-comment-id="{{ $comment->id }}">
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
+                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
+                                                                                                            </li>
+                                                                                                        @endforeach
+                                                                                                    </ul>
                                                                                                 @endif
                                                                                             </div>
 
-                                                                                            <form id="commentForm" action="javascript:void(0);" method="POST" class="mt-3">
+                                                                                            <form class="commentForm" data-post-id="{{ $task->id }}">
                                                                                                 @csrf
                                                                                                 <div class="comment-input d-flex gap-3">
-                                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
-                                                                                                    <input type="hidden" id="postId" value="{{ $task->id }}" name="post_id">
+                                                                                                    <input name="comment_text" class="form-control" placeholder="Leave a comment..." required />
+                                                                                                    <input type="hidden" name="post_id" value="{{ $task->id }}">
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
+                                                                                            
+                                                                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
-                                                                                                document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                                                                                    event.preventDefault();
+                                                                                                $(document).ready(function() {
+                                                                                                    $('.commentForm').off('submit').on('submit', function (event) {
+                                                                                                        event.preventDefault();
+                                                                                                        const postId = $(this).data('post-id');
+                                                                                                        const form = $(this);
+                                                                                                        const commentText = form.find('input[name="comment_text"]').val();
+                                                                                                        const submitButton = form.find('button[type="submit"]');
 
-                                                                                                    let commentText = document.getElementById('commentText').value;
-                                                                                                    let postId = document.getElementById('postId').value;
-                                                                                                    let token = document.querySelector('input[name="_token"]').value;
+                                                                                                        submitButton.prop('disabled', true);
 
-                                                                                                    fetch('/comments/store', {
-                                                                                                        method: 'POST',
-                                                                                                        headers: {
-                                                                                                            'Content-Type': 'application/json',
-                                                                                                            'X-CSRF-TOKEN': token
-                                                                                                        },
-                                                                                                        body: JSON.stringify({
-                                                                                                            comment_text: commentText,
-                                                                                                            post_id: postId
-                                                                                                        })
-                                                                                                    })
-                                                                                                    .then(response => response.json())
-                                                                                                    .then(data => {
-                                                                                                        if (data.success) {
-                                                                                                            let commentList = document.getElementById('commentList').querySelector('ul'); 
-                                                                                                            let newComment = `<li class="mb-2">
-                                                                                                                <strong>${data.user.name}(User):</strong> 
-                                                                                                                ${data.comment.comment_text} 
-                                                                                                                <small>${new Date(data.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
-                                                                                                            </li>`;
-                                                                                                            commentList.insertAdjacentHTML('beforeend', newComment); 
+                                                                                                        $.ajax({
+                                                                                                            url: '/comments-store',
+                                                                                                            method: 'POST',
+                                                                                                            data: form.serialize(),
+                                                                                                            success: function (response) {
+                                                                                                                let newComment = `
+                                                                                                                    <li class="mb-2">
+                                                                                                                        <strong>${response.comment.user_id}:</strong> 
+                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
+                                                                                                                    </li>`;
 
-                                                                                                            document.getElementById('commentText').value = ''; 
-                                                                                                        } else {
-                                                                                                            alert('Failed to post comment');
-                                                                                                        }
-                                                                                                    })
-                                                                                                    .catch(error => console.log('Error:', error));
+                                                                                                                $(`#commentList-${response.comment.post_id}`).append(newComment);
 
-                                                                                                });
-
-                                                                                                document.querySelectorAll('.delete-comment').forEach(button => {
-                                                                                                    button.addEventListener('click', function() {
-                                                                                                        let commentId = this.getAttribute('data-comment-id');
-                                                                                                        let token = document.querySelector('input[name="_token"]').value;
-
-                                                                                                        if (confirm('Are you sure you want to delete this comment?')) {
-                                                                                                            fetch(`/comments/${commentId}/delete`, {
-                                                                                                                method: 'DELETE',
-                                                                                                                headers: {
-                                                                                                                    'Content-Type': 'application/json',
-                                                                                                                    'X-CSRF-TOKEN': token
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .then(response => response.json())
-                                                                                                            .then(data => {
-                                                                                                                if (data.success) {
-                                                                                                                    document.querySelector(`li[data-comment-id="${commentId}"]`).remove();
-                                                                                                                } else {
-                                                                                                                    alert('Failed to delete comment');
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .catch(error => console.log('Error:', error));
-                                                                                                        }
+                                                                                                                form.find('input[name="comment_text"]').val('');
+                                                                                                            },
+                                                                                                            error: function (xhr, status, error) {
+                                                                                                                Swal.fire({
+                                                                                                                    icon: 'error',
+                                                                                                                    title: 'Error!',
+                                                                                                                    text: 'Failed to post the comment.',
+                                                                                                                    confirmButtonText: 'OK'
+                                                                                                                });
+                                                                                                            },
+                                                                                                            complete: function() {
+                                                                                                                submitButton.prop('disabled', false);
+                                                                                                            }
+                                                                                                        });
                                                                                                     });
                                                                                                 });
                                                                                             </script>
                                                                                         </div>
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="modal-footer">
@@ -807,17 +712,19 @@
                                                                                                 <p class="m-0 p-0">{{ $task->description }}</p>
                                                                                             </div>
                                                                                             <div>
-                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}"><i class="fa-solid fa-link"></i>Attecments</h5>
+                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}">
+                                                                                                    <i class="fa-solid fa-link"></i> Attachments
+                                                                                                </h5>
                                                                                                 @if(!empty($task->attachments))
                                                                                                     <ul class="list-unstyled">
                                                                                                         @foreach($task->attachments as $attachment)
                                                                                                             <li class="mb-2">
                                                                                                                 @if(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                                                                                    <a href="#" onclick="NextshowImage('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         <img src="{{ asset('assets/Task-Attechments/' . $attachment) }}" alt="{{ $attachment }}" style="width: 100px; height: auto;">
                                                                                                                     </a>
                                                                                                                 @elseif(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['pdf']))
-                                                                                                                    <a href="#" onclick="NextshowPDF('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         {{ $attachment }}
                                                                                                                     </a>
                                                                                                                 @endif
@@ -827,130 +734,79 @@
                                                                                                 @else
                                                                                                     <p>No attachments available.</p>
                                                                                                 @endif
-                                                                                                <div id="NextimagePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="NextclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <img id="NextpopupImage" src="" alt="" style="max-width:90%; max-height:90%;">
-                                                                                                </div>
-
-                                                                                                <div id="NextpdfPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="NextclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <iframe id="NextpopupPDF" src="" style="width:90%; height:90%;"></iframe>
-                                                                                                </div>
-
-                                                                                                <script>
-                                                                                                    function NextshowImage(src) {
-                                                                                                        document.getElementById('NextpopupImage').src = src;
-                                                                                                        document.getElementById('NextimagePopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function NextshowPDF(src) {
-                                                                                                        document.getElementById('NextpopupPDF').src = src;
-                                                                                                        document.getElementById('NextpdfPopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function NextclosePopup() {
-                                                                                                        document.getElementById('NextimagePopup').style.display = 'none';
-                                                                                                        document.getElementById('NextpdfPopup').style.display = 'none';
-                                                                                                    }
-                                                                                                </script>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="comment-section w-50 d-flex flex-column justify-content-between">
-                                                                                            <?php 
-                                                                                                $comments = DB::table('comments')->where('post_id', $task->id)->orderBy('created_at', 'asc')->get();
-                                                                                            ?>
                                                                                             <h3>Comments</h3>
 
-                                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
+                                                                                            <div id="commentList-{{ $task->id }}" class="comments-list overflow-auto" style="flex-grow: 1; overflow-x: auto;">
                                                                                                 @if($comments->isNotEmpty())
-                                                                                                <ul>
-                                                                                                    @foreach($comments as $comment)
-                                                                                                        <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                            <strong>{{ $users->name ?? 'Anonymous' }} (User):</strong> 
-                                                                                                            {{ $comment->comment_text }} 
-                                                                                                            <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
-                                                                                                            <button class="btn btn-danger btn-sm delete-comment" data-comment-id="{{ $comment->id }}">Delete</button>
-                                                                                                        </li>
-                                                                                                    @endforeach
-                                                                                                </ul>
-
+                                                                                                    <ul>
+                                                                                                        @foreach($comments as $comment)
+                                                                                                            <li class="mb-2" data-comment-id="{{ $comment->id }}">
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
+                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
+                                                                                                            </li>
+                                                                                                        @endforeach
+                                                                                                    </ul>
                                                                                                 @endif
                                                                                             </div>
 
-                                                                                            <form id="commentForm" action="javascript:void(0);" method="POST" class="mt-3">
+                                                                                            <form class="commentForm" data-post-id="{{ $task->id }}">
                                                                                                 @csrf
                                                                                                 <div class="comment-input d-flex gap-3">
-                                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
-                                                                                                    <input type="hidden" id="postId" value="{{ $task->id }}" name="post_id">
+                                                                                                    <input name="comment_text" class="form-control" placeholder="Leave a comment..." required />
+                                                                                                    <input type="hidden" name="post_id" value="{{ $task->id }}">
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
+                                                                                            
+                                                                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
-                                                                                                document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                                                                                    event.preventDefault();
+                                                                                                $(document).ready(function() {
+                                                                                                    $('.commentForm').off('submit').on('submit', function (event) {
+                                                                                                        event.preventDefault();
+                                                                                                        const postId = $(this).data('post-id');
+                                                                                                        const form = $(this);
+                                                                                                        const commentText = form.find('input[name="comment_text"]').val();
+                                                                                                        const submitButton = form.find('button[type="submit"]');
 
-                                                                                                    let commentText = document.getElementById('commentText').value;
-                                                                                                    let postId = document.getElementById('postId').value;
-                                                                                                    let token = document.querySelector('input[name="_token"]').value;
+                                                                                                        submitButton.prop('disabled', true);
 
-                                                                                                    fetch('/comments/store', {
-                                                                                                        method: 'POST',
-                                                                                                        headers: {
-                                                                                                            'Content-Type': 'application/json',
-                                                                                                            'X-CSRF-TOKEN': token
-                                                                                                        },
-                                                                                                        body: JSON.stringify({
-                                                                                                            comment_text: commentText,
-                                                                                                            post_id: postId
-                                                                                                        })
-                                                                                                    })
-                                                                                                    .then(response => response.json())
-                                                                                                    .then(data => {
-                                                                                                        if (data.success) {
-                                                                                                            let commentList = document.getElementById('commentList').querySelector('ul'); 
-                                                                                                            let newComment = `<li class="mb-2">
-                                                                                                                <strong>${data.user.name}(User):</strong> 
-                                                                                                                ${data.comment.comment_text} 
-                                                                                                                <small>${new Date(data.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
-                                                                                                            </li>`;
-                                                                                                            commentList.insertAdjacentHTML('beforeend', newComment); 
+                                                                                                        $.ajax({
+                                                                                                            url: '/comments-store',
+                                                                                                            method: 'POST',
+                                                                                                            data: form.serialize(),
+                                                                                                            success: function (response) {
+                                                                                                                let newComment = `
+                                                                                                                    <li class="mb-2">
+                                                                                                                        <strong>${response.comment.user_id}:</strong> 
+                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
+                                                                                                                    </li>`;
 
-                                                                                                            document.getElementById('commentText').value = ''; 
-                                                                                                        } else {
-                                                                                                            alert('Failed to post comment');
-                                                                                                        }
-                                                                                                    })
-                                                                                                    .catch(error => console.log('Error:', error));
+                                                                                                                $(`#commentList-${response.comment.post_id}`).append(newComment);
 
-                                                                                                });
-
-                                                                                                document.querySelectorAll('.delete-comment').forEach(button => {
-                                                                                                    button.addEventListener('click', function() {
-                                                                                                        let commentId = this.getAttribute('data-comment-id');
-                                                                                                        let token = document.querySelector('input[name="_token"]').value;
-
-                                                                                                        if (confirm('Are you sure you want to delete this comment?')) {
-                                                                                                            fetch(`/comments/${commentId}/delete`, {
-                                                                                                                method: 'DELETE',
-                                                                                                                headers: {
-                                                                                                                    'Content-Type': 'application/json',
-                                                                                                                    'X-CSRF-TOKEN': token
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .then(response => response.json())
-                                                                                                            .then(data => {
-                                                                                                                if (data.success) {
-                                                                                                                    document.querySelector(`li[data-comment-id="${commentId}"]`).remove();
-                                                                                                                } else {
-                                                                                                                    alert('Failed to delete comment');
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .catch(error => console.log('Error:', error));
-                                                                                                        }
+                                                                                                                form.find('input[name="comment_text"]').val('');
+                                                                                                            },
+                                                                                                            error: function (xhr, status, error) {
+                                                                                                                Swal.fire({
+                                                                                                                    icon: 'error',
+                                                                                                                    title: 'Error!',
+                                                                                                                    text: 'Failed to post the comment.',
+                                                                                                                    confirmButtonText: 'OK'
+                                                                                                                });
+                                                                                                            },
+                                                                                                            complete: function() {
+                                                                                                                submitButton.prop('disabled', false);
+                                                                                                            }
+                                                                                                        });
                                                                                                     });
                                                                                                 });
                                                                                             </script>
                                                                                         </div>
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="modal-footer">
@@ -1090,18 +946,19 @@
                                                                                                 <p class="m-0 p-0">{{ $task->description }}</p>
                                                                                             </div>
                                                                                             <div>
-                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}"><i class="fa-solid fa-link"></i>Attecments</h5>
-                                                                                                <div class="attachments-files">
+                                                                                                <h5 class="modal-title border-bottom my-4" id="taskModalLabel{{ $task->id }}">
+                                                                                                    <i class="fa-solid fa-link"></i> Attachments
+                                                                                                </h5>
                                                                                                 @if(!empty($task->attachments))
                                                                                                     <ul class="list-unstyled">
                                                                                                         @foreach($task->attachments as $attachment)
                                                                                                             <li class="mb-2">
                                                                                                                 @if(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                                                                                    <a href="#" onclick="NextshowImage('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         <img src="{{ asset('assets/Task-Attechments/' . $attachment) }}" alt="{{ $attachment }}" style="width: 100px; height: auto;">
                                                                                                                     </a>
                                                                                                                 @elseif(in_array(pathinfo($attachment, PATHINFO_EXTENSION), ['pdf']))
-                                                                                                                    <a href="#" onclick="NextshowPDF('{{ asset('assets/Task-Attechments/' . $attachment) }}')">
+                                                                                                                    <a href="{{ asset('assets/Task-Attechments/' . $attachment) }}" target="_blank">
                                                                                                                         {{ $attachment }}
                                                                                                                     </a>
                                                                                                                 @endif
@@ -1111,131 +968,80 @@
                                                                                                 @else
                                                                                                     <p>No attachments available.</p>
                                                                                                 @endif
-                                                                                                <div id="NextimagePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="NextclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <img id="NextpopupImage" src="" alt="" style="max-width:90%; max-height:90%;">
-                                                                                                </div>
-
-                                                                                                <div id="NextpdfPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-                                                                                                    <span onclick="NextclosePopup()" style="position: absolute; top: 10px; right: 20px; color: white; cursor: pointer; background: red; font-size: 30px; width: 35px; text-align: center;">&times;</span>
-                                                                                                    <iframe id="NextpopupPDF" src="" style="width:90%; height:90%;"></iframe>
-                                                                                                </div>
-
-                                                                                                <script>
-                                                                                                    function NextshowImage(src) {
-                                                                                                        document.getElementById('NextpopupImage').src = src;
-                                                                                                        document.getElementById('NextimagePopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function NextshowPDF(src) {
-                                                                                                        document.getElementById('NextpopupPDF').src = src;
-                                                                                                        document.getElementById('NextpdfPopup').style.display = 'flex';
-                                                                                                    }
-
-                                                                                                    function NextclosePopup() {
-                                                                                                        document.getElementById('NextimagePopup').style.display = 'none';
-                                                                                                        document.getElementById('NextpdfPopup').style.display = 'none';
-                                                                                                    }
-                                                                                                </script>
-                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="comment-section w-50 d-flex flex-column justify-content-between">
-                                                                                            <?php 
-                                                                                                $comments = DB::table('comments')->where('post_id', $task->id)->orderBy('created_at', 'asc')->get();
-                                                                                            ?>
                                                                                             <h3>Comments</h3>
 
-                                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
+                                                                                            <div id="commentList-{{ $task->id }}" class="comments-list overflow-auto" style="flex-grow: 1; overflow-x: auto;">
                                                                                                 @if($comments->isNotEmpty())
-                                                                                                <ul>
-                                                                                                    @foreach($comments as $comment)
-                                                                                                        <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                            <strong>{{ $users->name ?? 'Anonymous' }} (User):</strong> 
-                                                                                                            {{ $comment->comment_text }} 
-                                                                                                            <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
-                                                                                                            <button class="btn btn-danger btn-sm delete-comment" data-comment-id="{{ $comment->id }}">Delete</button>
-                                                                                                        </li>
-                                                                                                    @endforeach
-                                                                                                </ul>
-
+                                                                                                    <ul>
+                                                                                                        @foreach($comments as $comment)
+                                                                                                            <li class="mb-2" data-comment-id="{{ $comment->id }}">
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
+                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
+                                                                                                            </li>
+                                                                                                        @endforeach
+                                                                                                    </ul>
                                                                                                 @endif
                                                                                             </div>
 
-                                                                                            <form id="commentForm" action="javascript:void(0);" method="POST" class="mt-3">
+                                                                                            <form class="commentForm" data-post-id="{{ $task->id }}">
                                                                                                 @csrf
                                                                                                 <div class="comment-input d-flex gap-3">
-                                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
-                                                                                                    <input type="hidden" id="postId" value="{{ $task->id }}" name="post_id">
+                                                                                                    <input name="comment_text" class="form-control" placeholder="Leave a comment..." required />
+                                                                                                    <input type="hidden" name="post_id" value="{{ $task->id }}">
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
+                                                                                            
+                                                                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
-                                                                                                document.getElementById('commentForm').addEventListener('submit', function(event) {
-                                                                                                    event.preventDefault();
+                                                                                                $(document).ready(function() {
+                                                                                                    $('.commentForm').off('submit').on('submit', function (event) {
+                                                                                                        event.preventDefault();
+                                                                                                        const postId = $(this).data('post-id');
+                                                                                                        const form = $(this);
+                                                                                                        const commentText = form.find('input[name="comment_text"]').val();
+                                                                                                        const submitButton = form.find('button[type="submit"]');
 
-                                                                                                    let commentText = document.getElementById('commentText').value;
-                                                                                                    let postId = document.getElementById('postId').value;
-                                                                                                    let token = document.querySelector('input[name="_token"]').value;
+                                                                                                        submitButton.prop('disabled', true);
 
-                                                                                                    fetch('/comments/store', {
-                                                                                                        method: 'POST',
-                                                                                                        headers: {
-                                                                                                            'Content-Type': 'application/json',
-                                                                                                            'X-CSRF-TOKEN': token
-                                                                                                        },
-                                                                                                        body: JSON.stringify({
-                                                                                                            comment_text: commentText,
-                                                                                                            post_id: postId
-                                                                                                        })
-                                                                                                    })
-                                                                                                    .then(response => response.json())
-                                                                                                    .then(data => {
-                                                                                                        if (data.success) {
-                                                                                                            let commentList = document.getElementById('commentList').querySelector('ul'); 
-                                                                                                            let newComment = `<li class="mb-2">
-                                                                                                                <strong>${data.user.name}(User):</strong> 
-                                                                                                                ${data.comment.comment_text} 
-                                                                                                                <small>${new Date(data.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
-                                                                                                            </li>`;
-                                                                                                            commentList.insertAdjacentHTML('beforeend', newComment); 
+                                                                                                        $.ajax({
+                                                                                                            url: '/comments-store',
+                                                                                                            method: 'POST',
+                                                                                                            data: form.serialize(),
+                                                                                                            success: function (response) {
+                                                                                                                let newComment = `
+                                                                                                                    <li class="mb-2">
+                                                                                                                        <strong>${response.comment.user_id}:</strong> 
+                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
+                                                                                                                    </li>`;
 
-                                                                                                            document.getElementById('commentText').value = ''; 
-                                                                                                        } else {
-                                                                                                            alert('Failed to post comment');
-                                                                                                        }
-                                                                                                    })
-                                                                                                    .catch(error => console.log('Error:', error));
+                                                                                                                $(`#commentList-${response.comment.post_id}`).append(newComment);
 
-                                                                                                });
-
-                                                                                                document.querySelectorAll('.delete-comment').forEach(button => {
-                                                                                                    button.addEventListener('click', function() {
-                                                                                                        let commentId = this.getAttribute('data-comment-id');
-                                                                                                        let token = document.querySelector('input[name="_token"]').value;
-
-                                                                                                        if (confirm('Are you sure you want to delete this comment?')) {
-                                                                                                            fetch(`/comments/${commentId}/delete`, {
-                                                                                                                method: 'DELETE',
-                                                                                                                headers: {
-                                                                                                                    'Content-Type': 'application/json',
-                                                                                                                    'X-CSRF-TOKEN': token
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .then(response => response.json())
-                                                                                                            .then(data => {
-                                                                                                                if (data.success) {
-                                                                                                                    document.querySelector(`li[data-comment-id="${commentId}"]`).remove();
-                                                                                                                } else {
-                                                                                                                    alert('Failed to delete comment');
-                                                                                                                }
-                                                                                                            })
-                                                                                                            .catch(error => console.log('Error:', error));
-                                                                                                        }
+                                                                                                                form.find('input[name="comment_text"]').val('');
+                                                                                                            },
+                                                                                                            error: function (xhr, status, error) {
+                                                                                                                Swal.fire({
+                                                                                                                    icon: 'error',
+                                                                                                                    title: 'Error!',
+                                                                                                                    text: 'Failed to post the comment.',
+                                                                                                                    confirmButtonText: 'OK'
+                                                                                                                });
+                                                                                                            },
+                                                                                                            complete: function() {
+                                                                                                                submitButton.prop('disabled', false);
+                                                                                                            }
+                                                                                                        });
                                                                                                     });
                                                                                                 });
+
                                                                                             </script>
                                                                                         </div>
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="modal-footer">

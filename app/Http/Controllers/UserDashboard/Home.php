@@ -68,7 +68,9 @@ class Home extends Controller
             ->select('comments.*', 'user.name')
             ->first();
 
-        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount','users');
+        $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
+
+        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount','users','comments');
         
         return view('UserDashboard.User-Dashboard', $data);
     }

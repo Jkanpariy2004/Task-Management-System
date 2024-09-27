@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Invitation</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/demo.css" />
 </head>
 <body class="bg-light">
     <div class="container mt-5">

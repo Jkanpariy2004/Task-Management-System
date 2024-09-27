@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Users as dbusers;
+use App\Models\Comment as dbcomment;
 use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
 
@@ -18,8 +19,10 @@ class Task extends Controller
         if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
+
+        $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
         
-        return view('Dashboard.Task');
+        return view('Dashboard.Task', compact('comments'));
     }
 
     public function FetchTask()
@@ -228,5 +231,43 @@ class Task extends Controller
         $ids = array_filter($ids, 'is_numeric');
         dbtask::destroy($ids);
         return response()->json(['status' => 'success', 'message' => 'Tasks deleted successfully']);
+    }
+
+    public function store_comment(Request $request)
+    {
+        $request->validate([
+            'comment_text' => 'required|max:255',
+            'post_id' => 'required|integer',
+        ]);
+
+        $FetchUser = Session::get('adminemail');
+        
+        if (!$FetchUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found in session.'
+            ], 404);
+        }
+
+        $userData = DB::table('admin')->where('email', $FetchUser)->first();
+
+        if (!$userData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User data not found.'
+            ], 404);
+        }
+
+        $comment = new dbcomment();
+        $comment->user_id = $userData->name.'(admin)';
+        $comment->comment_text = $request->comment_text;
+        $comment->post_id = $request->post_id;
+        $comment->save();
+
+        return response()->json([
+            'success' => true,
+            'user' => $userData,
+            'comment' => $comment
+        ]);
     }
 }

@@ -42,6 +42,12 @@
         font-size: 0.9em;
         color: #777;
     }
+
+    .comments-list {
+        max-height: 500px;
+        overflow-y: auto; 
+    }
+
 </style>
 
 <div class="layout-wrapper layout-content-navbar">
@@ -99,7 +105,7 @@
                                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
+                                    document.addEventListener('DOMContentLoaded', function () {
                                         @if (session('success'))
                                             Swal.fire({
                                                 icon: 'success',
@@ -118,17 +124,16 @@
                                             });
                                         @endif
 
-                                        $(document).ready(function() {
+                                        $(document).ready(function () {
                                             $.ajax({
                                                 type: "GET",
                                                 url: "/fetch-task",
                                                 dataType: "json",
-                                                success: function(response) {
+                                                success: function (response) {
                                                     $('#example').DataTable().clear().destroy();
 
                                                     let tableData = [];
-
-                                                    $.each(response.tasks, function(key, item) {
+                                                    $.each(response.tasks, function (key, item) {
                                                         tableData.push([
                                                             `<input type="checkbox" class="select-item animated-checkbox" data-id="${item.id}" />`,
                                                             item.id,
@@ -150,17 +155,25 @@
                                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                         </div>
                                                                         <div class="modal-body text-start">
-                                                                            <div id="commentList" class="comments-list overflow-auto" style="flex-grow: 1;">
-                                                                                
+                                                                            <div id="commentList-${item.id}" class="comments-list overflow-auto" style="flex-grow: 1; max-height: 300px;" data-comment-count="{{ $comments->count() }}">
+                                                                                @if($comments->isNotEmpty())
+                                                                                    <ul>
+                                                                                        @foreach($comments as $comment)
+                                                                                            <li class="mb-2" data-comment-id="{{ $comment->id }}">
+                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
+                                                                                                {{ $comment->comment_text }} 
+                                                                                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
+                                                                                            </li>
+                                                                                        @endforeach
+                                                                                    </ul>
+                                                                                @endif
                                                                             </div>
-                                                                            <form action="/comments/store" method="POST" class="mt-3">
+
+                                                                            <form class="commentForm" data-post-id="${item.id}">
                                                                                 @csrf
                                                                                 <div class="comment-input d-flex gap-3">
-                                                                                    <input name="comment_text" id="commentText" class="form-control" placeholder="Leave a comment..." />
-                                                                                    @error('comment_text')
-                                                                                        {{ $message }}
-                                                                                    @enderror
-                                                                                    <input type="hidden" id="postId" value="${item.id}" name="post_id">
+                                                                                    <input name="comment_text" class="form-control" placeholder="Leave a comment..." required />
+                                                                                    <input type="hidden" name="post_id" value="${item.id}">
                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                 </div>
                                                                             </form>
@@ -180,7 +193,6 @@
                                                         ]);
                                                     });
 
-
                                                     $('#example').DataTable({
                                                         data: tableData,
                                                         lengthMenu: [7, 10, 25, 50, 75, 100],
@@ -188,16 +200,11 @@
                                                         paging: true,
                                                         searching: true,
                                                         ordering: true,
-                                                        columnDefs: [{
-                                                            targets: 0,
-                                                            orderable: false
-                                                        }],
-                                                        drawCallback: function(settings) {
-                                                            $('.item-delete').off('click').on('click', function(
-                                                                event) {
+                                                        columnDefs: [{ targets: 0, orderable: false }],
+                                                        drawCallback: function (settings) {
+                                                            $('.item-delete').off('click').on('click', function (event) {
                                                                 event.preventDefault();
                                                                 const id = $(this).data('id');
-
                                                                 Swal.fire({
                                                                     title: 'Are you sure?',
                                                                     text: "You won't be able to revert this!",
@@ -211,54 +218,58 @@
                                                                         $.ajax({
                                                                             url: `/task-delete/${id}`,
                                                                             method: 'GET',
-                                                                            data: {
-                                                                                _token: '{{ csrf_token() }}'
-                                                                            },
-                                                                            success: function(
-                                                                                response
-                                                                            ) {
+                                                                            data: { _token: '{{ csrf_token() }}' },
+                                                                            success: function () {
                                                                                 Swal.fire({
-                                                                                        icon: 'success',
-                                                                                        title: 'Deleted!',
-                                                                                        text: 'The Task has been deleted.',
-                                                                                        confirmButtonText: 'OK'
-                                                                                    })
-                                                                                    .then(
-                                                                                        () => {
-                                                                                            $('#example')
-                                                                                                .DataTable()
-                                                                                                .row(
-                                                                                                    $(event
-                                                                                                        .target
-                                                                                                    )
-                                                                                                    .closest(
-                                                                                                        'tr'
-                                                                                                    )
-                                                                                                )
-                                                                                                .remove()
-                                                                                                .draw();
-                                                                                        }
-                                                                                    );
+                                                                                    icon: 'success',
+                                                                                    title: 'Deleted!',
+                                                                                    text: 'The Task has been deleted.',
+                                                                                    confirmButtonText: 'OK'
+                                                                                }).then(() => {
+                                                                                    $('#example').DataTable().row($(event.target).closest('tr')).remove().draw();
+                                                                                });
                                                                             },
-                                                                            error: function(
-                                                                                xhr,
-                                                                                status,
-                                                                                error
-                                                                            ) {
-                                                                                console
-                                                                                    .error(
-                                                                                        'Error deleting post:',
-                                                                                        xhr,
-                                                                                        status,
-                                                                                        error
-                                                                                    );
+                                                                            error: function (xhr, status, error) {
                                                                                 Swal.fire({
                                                                                     icon: 'error',
                                                                                     title: 'Error!',
-                                                                                    text: 'An error occurred while deleting the post.',
+                                                                                    text: 'An error occurred while deleting the task.',
                                                                                     confirmButtonText: 'OK'
                                                                                 });
                                                                             }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            });
+
+                                                            $('.commentForm').off('submit').on('submit', function (event) {
+                                                                event.preventDefault();
+                                                                const postId = $(this).data('post-id');
+                                                                const form = $(this);
+                                                                const commentText = form.find('input[name="comment_text"]').val();
+
+                                                                $.ajax({
+                                                                    url: '/store-comments',
+                                                                    method: 'POST',
+                                                                    data: form.serialize(),
+                                                                    success: function (response) {
+                                                                        let newComment = `
+                                                                            <li class="mb-2">
+                                                                                <strong>${response.comment.user_id}:</strong> 
+                                                                                ${response.comment.comment_text} 
+                                                                                <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
+                                                                            </li>`;
+
+                                                                        $(`#commentList-${response.comment.post_id}`).append(newComment);
+
+                                                                        form.find('input[name="comment_text"]').val('');
+                                                                    },
+                                                                    error: function (xhr, status, error) {
+                                                                        Swal.fire({
+                                                                            icon: 'error',
+                                                                            title: 'Error!',
+                                                                            text: 'Failed to post the comment.',
+                                                                            confirmButtonText: 'OK'
                                                                         });
                                                                     }
                                                                 });
@@ -268,15 +279,16 @@
                                                 }
                                             });
 
-                                            $('#select-all').on('click', function() {
+                                            // Bulk delete functionality...
+                                            $('#select-all').on('click', function () {
                                                 const isChecked = $(this).prop('checked');
                                                 $('.select-item').prop('checked', isChecked);
                                             });
 
-                                            $('#bulk-delete-btn').on('click', function(event) {
+                                            $('#bulk-delete-btn').on('click', function (event) {
                                                 event.preventDefault();
                                                 const selectedIds = [];
-                                                $('.select-item:checked').each(function() {
+                                                $('.select-item:checked').each(function () {
                                                     selectedIds.push($(this).data('id'));
                                                 });
 
@@ -307,33 +319,23 @@
                                                                 ids: selectedIds,
                                                                 _token: '{{ csrf_token() }}'
                                                             },
-                                                            success: function(response) {
+                                                            success: function () {
                                                                 Swal.fire({
                                                                     icon: 'success',
                                                                     title: 'Deleted!',
                                                                     text: 'Selected items have been deleted.',
                                                                     confirmButtonText: 'OK'
                                                                 }).then(() => {
-                                                                    var table = $('#example')
-                                                                        .DataTable();
-                                                                    selectedIds.forEach(function(
-                                                                        id) {
-                                                                        table.row($(
-                                                                                    `input[data-id="${id}"]`
-                                                                                )
-                                                                                .closest(
-                                                                                    'tr'))
-                                                                            .remove();
+                                                                    var table = $('#example').DataTable();
+                                                                    selectedIds.forEach(function (id) {
+                                                                        table.row($(`input[data-id="${id}"]`).closest('tr')).remove();
                                                                     });
                                                                     table.draw();
 
-                                                                    $('#select-all').prop('checked',
-                                                                        false);
+                                                                    $('#select-all').prop('checked', false);
                                                                 });
                                                             },
-                                                            error: function(xhr, status, error) {
-                                                                console.error('Error deleting items:', xhr,
-                                                                    status, error);
+                                                            error: function (xhr, status, error) {
                                                                 Swal.fire({
                                                                     icon: 'error',
                                                                     title: 'Error!',

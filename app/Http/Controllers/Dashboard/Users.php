@@ -200,23 +200,21 @@ class Users extends Controller
     {
         $request->validate([
             'password' => 'required|min:6',
-            'confirm_password' => 'required|same:password',
-            'token' => 'required' 
+            'confirmPassword' => 'required|same:password',
+            'token' => 'required'
         ]);
 
         $token = $request->input('token');
-        
         $user = dbusers::where('token', $token)->first();
-        
+
         if (!$user) {
-            return redirect()->back()->with('error', 'User not found.');
+            return response()->json(['error' => 'Token is Expired. User not found.'], 404);
         }
 
         $user->password = bcrypt($request->input('password'));
         $user->token = NULL;
         $user->save();
 
-        return redirect()->back()->with('success', 'Password Created successfully!');
+        return response()->json(['success' => 'Password Created successfully!']);
     }
-
 }
