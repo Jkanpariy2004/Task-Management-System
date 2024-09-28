@@ -11,84 +11,85 @@ use App\Http\Controllers\UserDashboard\Login\UserLogin;
 use App\Http\Controllers\UserDashboard\Home;
 use App\Http\Controllers\UserDashboard\Comment;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 // // // // // // // //
-// User Panel Route  //
+// User Panel Routes //
 // // // // // // // //
+Route::prefix('user')->group(function () {
+    Route::controller(UserLogin::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('login', 'UserLoginCheck');
+        Route::get('logout', 'UserLogout');
+    });
 
-// Login Page
-Route::get('/user',[UserLogin::class,'index']);
-Route::post('User-Login',[UserLogin::class,'UserLoginCheck']);
-Route::get('/UserLogout',[UserLogin::class,'UserLogout']);
+    Route::controller(Home::class)->group(function () {
+        Route::get('dashboard', 'index');
+        Route::get('fetch-user-task', 'FetchUserTask');
+    });
+});
 
-// Home Page
-Route::get('/user-dashboard',[Home::class,'index']);
-Route::get('/Fetch-User-Task',[Home::class,'FetchUserTask']);
+Route::controller(Comment::class)->group(function () {
+    Route::post('/comments-store', 'store')->name('comments.store');
+    Route::delete('/comments/{id}/delete', 'destroy');
+});
 
-// // // // // // // //
-// Admin Panel Route //
-// // // // // // // //
+// // // // // // //  //
+// Admin Panel Routes //
+// // // // // // //  //
+Route::prefix('admin')->group(function () {
+    Route::controller(Login::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('check-login', 'LoginCheck');
+        Route::get('logout', 'logout');
+    });
 
-// login Route
-Route::get('/admin',[Login::class,'index']);
-Route::post('Check-Login',[Login::class,'LoginCheck']);
-Route::get('/logout',[Login::class,'logout']);
+    Route::controller(Index::class)->group(function () {
+        Route::get('dashboard', 'index');
+    });
 
-// Dashboard Route
-Route::get('/dashboard',[Index::class,'index']);
+    Route::prefix('users')->controller(Users::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('add', 'AddUsers');
+        Route::post('submit', 'SubmitUser');
+        Route::get('fetch', 'FetchUsers');
+        Route::get('delete/{id}', 'UsersDelete')->name('users.delete');
+        Route::get('edit/{id}', 'edit');
+        Route::post('update/{id}', 'UserUpdate')->name('users.update');
+        Route::post('send-invitation', 'sendInvitation');
+        Route::get('password-creation-form', 'showPasswordCreationForm')->name('password.creation.form');
+        Route::post('password-creation', 'store');
+        Route::post('bulk-delete', 'bulkDelete');
+    });
 
-// users Route
-Route::get('/users',[Users::class,'index']);
-Route::get('/add-users',[Users::class,'AddUsers']);
-Route::post('/Submit-Post',[Users::class,'SubmitUser']);
-Route::get('/fetch-users',[Users::class,'FetchUsers']);
-Route::get('/users-delete/{id}',[Users::class,'UsersDelete'])->name('users.delete');
-Route::get('/users-edit/{id}',[Users::class,'edit']);
-Route::post('/users-update/{id}',[Users::class,'UserUpdate'])->name('users.update');
-Route::post('/send-invitation', [Users::class, 'sendInvitation']);
-Route::get('/password-creation-form', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-// Route::get('/password-creation-form/{username}', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-Route::post('/password-creation', [Users::class, 'store']);
-Route::post('/bulk-delete-users', [Users::class, 'bulkDelete']);
+    Route::prefix('company')->controller(Company::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('fetch', 'FetchCompany');
+        Route::get('add', 'AddCompany');
+        Route::post('submit', 'SubmitCompany');
+        Route::get('delete/{id}', 'CompanyDelete')->name('company.delete');
+        Route::post('bulk-delete', 'bulkDelete');
+        Route::get('edit/{id}', 'edit');
+        Route::post('update/{id}', 'CompanyUpdate')->name('company.update');
+    });
 
-// cache clear
-Route::get('/Cache-Setting',[CacheClear::class,'index']);
-Route::get('/cache-clear', [CacheClear::class, 'clearCache'])->name('cache.clear');
-Route::get('/route-cache-clear', [CacheClear::class, 'clearRouteCache'])->name('route.cache.clear');
-Route::get('/config-cache-clear', [CacheClear::class, 'clearConfigCache'])->name('config.cache.clear');
-Route::get('/view-cache-clear', [CacheClear::class, 'clearViewCache'])->name('view.cache.clear');
-Route::get('/compiled-cache-clear', [CacheClear::class, 'clearCompiledCache'])->name('compiled.cache.clear');
-Route::get('/optimize-cache-clear', [CacheClear::class, 'optimizeCache'])->name('optimize.cache.clear');
+    Route::prefix('task')->controller(Task::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('fetch', 'FetchTask');
+        Route::get('add', 'AddTask');
+        Route::post('submit', 'SubmitTask');
+        Route::get('delete/{id}', 'TaskDelete')->name('task.delete');
+        Route::post('bulk-delete', 'bulkDelete');
+        Route::get('edit/{id}', 'edit');
+        Route::post('update/{id}', 'TaskUpdate')->name('task.update');
+        Route::post('store-comments', 'store_comment')->name('store.comments');
+    });
+});
 
-// Company Route
-Route::get('/company',[Company::class,'index']);
-Route::get('/fetch-company',[Company::class,'FetchCompany']);
-Route::get('/add-company',[Company::class,'AddCompany']);
-Route::post('/Submit-Company',[Company::class,'SubmitCompany']);
-Route::get('/company-delete/{id}',[Company::class,'CompanyDelete'])->name('company.delete');
-Route::post('/bulk-delete-company', [Company::class, 'bulkDelete']);
-Route::get('/company-edit/{id}',[Company::class,'edit']);
-Route::post('/company-update/{id}',[Company::class,'CompanyUpdate'])->name('company.update');
-
-// Task Route
-Route::get('/task',[Task::class,'index']);
-Route::get('/fetch-task',[Task::class,'FetchTask']);
-Route::get('/add-task',[Task::class,'AddTask']);
-Route::post('/Submit-Task',[Task::class,'SubmitTask']);
-Route::get('/task-delete/{id}',[Task::class,'TaskDelete'])->name('task.delete');
-Route::post('/bulk-delete-task', [Task::class, 'bulkDelete']);
-Route::get('/task-edit/{id}',[Task::class,'edit']);
-Route::post('/task-update/{id}',[Task::class,'TaskUpdate'])->name('task.update');
-Route::post('/comments-store', [Comment::class, 'store'])->name('comments.store'); //user
-Route::delete('/comments/{id}/delete', [Comment::class, 'destroy']);
-Route::post('/store-comments', [Task::class, 'store_comment'])->name('store.comments'); //admin
+Route::prefix('cache')->controller(CacheClear::class)->group(function () {
+    Route::get('setting', 'index');
+    Route::get('clear', 'clearCache')->name('cache.clear');
+    Route::get('route-clear', 'clearRouteCache')->name('route.cache.clear');
+    Route::get('config-clear', 'clearConfigCache')->name('config.cache.clear');
+    Route::get('view-clear', 'clearViewCache')->name('view.cache.clear');
+    Route::get('compiled-clear', 'clearCompiledCache')->name('compiled.cache.clear');
+    Route::get('optimize-clear', 'optimizeCache')->name('optimize.cache.clear');
+});
