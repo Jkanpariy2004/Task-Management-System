@@ -1,0 +1,11 @@
+1.middleware login check
+2.login using auth/breeze
+3.css change in all file
+4.script add end of the code in all file
+5.blade file re order
+6.constsnt file declare
+7.custome middleware
+8.datatable call in ajax
+9.route grouping & prefix(complete)
+10.role permission
+11.relationship in model
