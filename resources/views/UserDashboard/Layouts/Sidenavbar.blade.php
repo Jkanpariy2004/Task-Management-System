@@ -28,7 +28,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ Request::is('user-dashboard') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('user/dashboard') ? 'active' : '' }}">
             <a href="/user-dashboard" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Home">Home</div>

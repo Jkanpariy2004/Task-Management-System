@@ -59,22 +59,22 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <button class="btn btn-primary mt-2" onclick="clearCache('cache-clear')">Cache
-                                            Clear</button>                                            
-                                        <button class="btn btn-primary mt-2"
-                                            onclick="clearCache('route-cache-clear')">Route
-                                            Cache Clear</button>
-                                        <button class="btn btn-primary mt-2"
-                                            onclick="clearCache('config-cache-clear')">Config
-                                            Cache Clear</button>
-                                        <button class="btn btn-primary mt-2"
-                                            onclick="clearCache('view-cache-clear')">View Cache
+                                        <button class="btn btn-primary mt-2" onclick="clearCache('admin/cache/cache-clear')">Cache
                                             Clear</button>
                                         <button class="btn btn-primary mt-2"
-                                            onclick="clearCache('compiled-cache-clear')">Compiled File
+                                            onclick="clearCache('admin/cache/route-cache-clear')">Route
+                                            Cache Clear</button>
+                                        <button class="btn btn-primary mt-2"
+                                            onclick="clearCache('admin/cache/config-cache-clear')">Config
+                                            Cache Clear</button>
+                                        <button class="btn btn-primary mt-2"
+                                            onclick="clearCache('admin/cache/view-cache-clear')">View Cache
                                             Clear</button>
                                         <button class="btn btn-primary mt-2"
-                                            onclick="clearCache('optimize-cache-clear')">Optimize Cache
+                                            onclick="clearCache('admin/cache/compiled-cache-clear')">Compiled File
+                                            Clear</button>
+                                        <button class="btn btn-primary mt-2"
+                                            onclick="clearCache('admin/cache/optimize-cache-clear')">Optimize Cache
                                             Clear</button>
                                     </div>
                                 </div>

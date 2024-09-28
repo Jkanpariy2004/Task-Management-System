@@ -157,7 +157,7 @@
                                 var formData = new FormData(this);
 
                                 $.ajax({
-                                    url: '/User-Login',
+                                    url: '/user/login',
                                     type: 'POST',
                                     data: formData,
                                     processData: false,
@@ -171,7 +171,7 @@
                                             timerProgressBar: true,
                                             confirmButtonText: 'OK'
                                         }).then(function() {
-                                            window.location.href = '/user-dashboard';
+                                            window.location.href = '/user/dashboard';
                                         });
                                     },
                                     error: function(xhr) {

@@ -167,7 +167,7 @@
                     var formData = new FormData(this);
 
                     $.ajax({
-                        url: '/password-creation',
+                        url: '/admin/users/password-creation',
                         type: 'POST',
                         data: formData,
                         processData: false,

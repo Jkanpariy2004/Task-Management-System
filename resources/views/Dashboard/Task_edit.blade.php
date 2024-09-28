@@ -49,7 +49,7 @@
                                             <input type="text" class="form-control" name="task_title" id="task_title" value="{{ $new->title }}" placeholder="Enter Task Title" />
                                             <div class="invalid-feedback" id="task_title-error"></div>
                                         </div>
-                                        
+
                                         <div class="mb-3 col-4">
                                             <label for="task_description" class="form-label">Task Description</label>
                                             <textarea id="task_description" name="task_description" class="form-control" placeholder="Enter Post Description">{{ $new->description }}</textarea>
@@ -289,7 +289,7 @@
                             timerProgressBar: true,
                             confirmButtonText: 'OK'
                         }).then(function() {
-                            window.location.href = '/task';
+                            window.location.href = '/admin/task';
                         });
                     },
                     error: function(xhr) {

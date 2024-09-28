@@ -64,7 +64,7 @@
   </head>
 
   <body>
-    
+
     <!-- Navbar -->
     <nav
     class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -121,7 +121,7 @@
             </ul>
         </li>
         <!--/ Language -->
-        
+
         <!-- Style Switcher -->
         <li class="nav-item me-2 me-xl-0">
             <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
@@ -129,7 +129,7 @@
             </a>
         </li>
         <!--/ Style Switcher -->
-        
+
         <!-- Quick links  -->
         <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">
             <a
@@ -542,7 +542,7 @@
                 <div class="dropdown-divider"></div>
             </li>
             <li>
-                <a class="dropdown-item" href="/UserLogout">
+                <a class="dropdown-item" href="/user/logout">
                 <i class="ti ti-logout me-2 ti-sm"></i>
                 <span class="align-middle">Log Out</span>
                 </a>

@@ -26,7 +26,7 @@
                                         <h3>Company Data</h3>
                                     </div>
                                     <div class="w-50 text-end">
-                                        <a href="/add-company" class="btn btn-primary">
+                                        <a href="/admin/company/add" class="btn btn-primary">
                                             <i class="ti ti-plus me-sm-1"></i>Add Company
                                         </a>
 
@@ -79,7 +79,7 @@
                                         $(document).ready(function() {
                                             $.ajax({
                                                 type: "GET",
-                                                url: "/fetch-company",
+                                                url: "/admin/company/fetch-company",
                                                 dataType: "json",
                                                 success: function(response) {
                                                     $('#example').DataTable().clear().destroy();
@@ -97,7 +97,7 @@
                                                             item.city,
                                                             item.country,
                                                             `<div>
-                                                                <a href="/company-edit/${item.id}" class="btn btn-sm btn-icon item-edit">
+                                                                <a href="/admin/company/edit/${item.id}" class="btn btn-sm btn-icon item-edit">
                                                                     <i class="text-primary ti ti-pencil"></i>
                                                                 </a>
                                                                 <a class="btn btn-sm btn-icon item-delete" href="#" data-id="${item.id}">
@@ -135,7 +135,7 @@
                                                                 }).then((result) => {
                                                                     if (result.isConfirmed) {
                                                                         $.ajax({
-                                                                            url: `/company-delete/${id}`,
+                                                                            url: `/admin/company/delete/${id}`,
                                                                             method: 'GET',
                                                                             data: {
                                                                                 _token: '{{ csrf_token() }}'
@@ -202,7 +202,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         $.ajax({
-                                                            url: '/bulk-delete-company',
+                                                            url: '{{ route("bulk.delete.company") }}',
                                                             method: 'POST',
                                                             data: {
                                                                 ids: selectedIds,

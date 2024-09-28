@@ -28,13 +28,13 @@
                                         <input type="text" class="form-control" name="c_name" id="c_name" value="{{ $new->c_name }}" placeholder="Enter Company Name" />
                                         <div class="invalid-feedback" id="c_name-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="c_email" class="form-label">Company Email</label>
                                         <input type="email" class="form-control" name="c_email" id="c_email" value="{{ $new->c_email }}" placeholder="Enter Company Email" />
                                         <div class="invalid-feedback" id="c_email-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="c_mobile" class="form-label">Company Mobile</label>
                                         <input type="text" class="form-control" name="c_mobile" id="c_mobile" value="{{ $new->c_phone_no }}" placeholder="Enter Company Mobile" />
@@ -253,7 +253,7 @@
                                         </select>
                                         <div class="invalid-feedback" id="country-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary w-100">Add Company</button>
                                     </div>
@@ -349,7 +349,7 @@
                             timerProgressBar: true,
                             confirmButtonText: 'OK'
                         }).then(function() {
-                            window.location.href = '/company';
+                            window.location.href = '/admin/company';
                         });
                     },
                     error: function(xhr) {

@@ -21,7 +21,7 @@ class Users extends Controller
         if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-        
+
         return view('Dashboard.Users');
     }
 
@@ -30,7 +30,7 @@ class Users extends Controller
         if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-        
+
         $companys = dbcompany::all();
         return view('Dashboard.Add-Users',compact('companys'));
     }
@@ -133,11 +133,11 @@ class Users extends Controller
         if (!Session::has('adminemail')) {
             return redirect('/admin')->with('error', 'Please login to access this page.');
         }
-            
+
         $companys = dbcompany::all();
         $show = dbusers::all();
         $new = dbusers::find($id);
-        $url = url('/users-update/' . $id);
+        $url = url('/admin/users/update/' . $id);
         $com = compact('show', 'new', 'url','companys');
         return view('Dashboard.User_edit', $com);
     }
@@ -181,7 +181,7 @@ class Users extends Controller
 
         $user->token = $token;
         $user->save();
-        $passwordCreationUrl = url('/password-creation-form?token='.$token); 
+        $passwordCreationUrl = url('/admin/users/password-creation-form?token='.$token);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
 

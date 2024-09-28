@@ -50,7 +50,7 @@
                                             <input type="text" class="form-control" name="task_title" id="task_title" placeholder="Enter Task Title" />
                                             <div class="invalid-feedback" id="task_title-error"></div>
                                         </div>
-                                        
+
                                         <div class="mb-3 col-4">
                                             <label for="task_description" class="form-label">Task Description</label>
                                             <textarea id="task_description" name="task_description" class="form-control" placeholder="Enter Post Description"></textarea>
@@ -146,7 +146,7 @@
                                                 const files = event.target.files;
 
                                                 const newPreviewStartIndex = oldImages.length;
-                                                
+
                                                 Array.from(previewContainer.querySelectorAll('.new-upload')).forEach((element) => {
                                                     element.remove();
                                                 });
@@ -186,8 +186,8 @@
                                                     }
                                                 });
 
-                                                fileInput.files = dt.files; 
-                                                fileInput.dispatchEvent(new Event('change')); 
+                                                fileInput.files = dt.files;
+                                                fileInput.dispatchEvent(new Event('change'));
 
                                                 previewElement.remove();
                                             }
@@ -247,19 +247,19 @@
                 isValid = false;
             }
 
-            // var start_date = $('#start_date').val();
-            // if (start_date.trim() === '') {
-            //     $('#start_date').addClass('is-invalid');
-            //     $('#start_date-error').text('Start date is required');
-            //     isValid = false;
-            // }
+            var start_date = $('#start_date').val();
+            if (start_date.trim() === '') {
+                $('#start_date').addClass('is-invalid');
+                $('#start_date-error').text('Start date is required');
+                isValid = false;
+            }
 
-            // var due_date = $('#due_date').val();
-            // if (due_date === '') {
-            //     $('#due_date').addClass('is-invalid');
-            //     $('#due_date-error').text('Due date is required');
-            //     isValid = false;
-            // }
+            var due_date = $('#due_date').val();
+            if (due_date === '') {
+                $('#due_date').addClass('is-invalid');
+                $('#due_date-error').text('Due date is required');
+                isValid = false;
+            }
 
             var assign = $('#assign').val();
             if (assign === '') {
@@ -279,7 +279,7 @@
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: '/Submit-Task',
+                    url: '{{ route("submit.task") }}',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -293,7 +293,7 @@
                             timerProgressBar: true,
                             confirmButtonText: 'OK'
                         }).then(function() {
-                            window.location.href = '/task';
+                            window.location.href = '/admin/task';
                         });
                     },
                     error: function(xhr) {

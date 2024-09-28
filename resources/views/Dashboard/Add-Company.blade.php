@@ -28,13 +28,13 @@
                                         <input type="text" class="form-control" name="c_name" id="c_name" placeholder="Enter Company Name" />
                                         <div class="invalid-feedback" id="c_name-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="c_email" class="form-label">Company Email</label>
                                         <input type="email" class="form-control" name="c_email" id="c_email" placeholder="Enter Company Email" />
                                         <div class="invalid-feedback" id="c_email-error"></div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="c_mobile" class="form-label">Company Mobile</label>
                                         <input type="text" class="form-control" name="c_mobile" id="c_mobile" placeholder="Enter Company Mobile" />
@@ -337,7 +337,7 @@
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: '/Submit-Company',
+                    url: '{{ route("submit.company") }}',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -351,7 +351,7 @@
                             timerProgressBar: true,
                             confirmButtonText: 'OK'
                         }).then(function() {
-                            window.location.href = '/company';
+                            window.location.href = '/admin/company';
                         });
                     },
                     error: function(xhr) {

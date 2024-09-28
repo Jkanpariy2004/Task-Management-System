@@ -102,7 +102,7 @@
             var formData = new FormData(this);
 
             $.ajax({
-                url: '/Submit-Post',
+                url: '/admin/users/submit',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -116,7 +116,7 @@
                         timerProgressBar: true,
                         confirmButtonText: 'OK'
                     }).then(function() {
-                        window.location.href = '/users';
+                        window.location.href = '/admin/users';
                     });
                 },
                 error: function(xhr) {

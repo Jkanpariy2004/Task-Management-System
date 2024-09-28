@@ -45,7 +45,7 @@
 
     .comments-list {
         max-height: 500px;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
 
 </style>
@@ -74,7 +74,7 @@
                                         <h3>Task Data</h3>
                                     </div>
                                     <div class="w-50 text-end">
-                                        <a href="/add-task" class="btn btn-primary">
+                                        <a href="{{ route('add.task') }}" class="btn btn-primary">
                                             <i class="ti ti-plus me-sm-1"></i>Add Task
                                         </a>
 
@@ -127,7 +127,7 @@
                                         $(document).ready(function () {
                                             $.ajax({
                                                 type: "GET",
-                                                url: "/fetch-task",
+                                                url: "{{ route('fetch.task') }}",
                                                 dataType: "json",
                                                 success: function (response) {
                                                     $('#example').DataTable().clear().destroy();
@@ -160,8 +160,8 @@
                                                                                     <ul>
                                                                                         @foreach($comments as $comment)
                                                                                             <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
-                                                                                                {{ $comment->comment_text }} 
+                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong>
+                                                                                                {{ $comment->comment_text }}
                                                                                                 <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
                                                                                             </li>
                                                                                         @endforeach
@@ -183,7 +183,7 @@
                                                             </div>
                                                             `,
                                                             `<div>
-                                                                <a href="/task-edit/${item.id}" class="btn btn-sm btn-icon item-edit">
+                                                                <a href="/admin/task/edit/${item.id}" class="btn btn-sm btn-icon item-edit">
                                                                     <i class="text-primary ti ti-pencil"></i>
                                                                 </a>
                                                                 <a class="btn btn-sm btn-icon item-delete" href="#" data-id="${item.id}">
@@ -216,7 +216,7 @@
                                                                 }).then((result) => {
                                                                     if (result.isConfirmed) {
                                                                         $.ajax({
-                                                                            url: `/task-delete/${id}`,
+                                                                            url: '{{ route("task.delete", ":id") }}'.replace(':id', id),
                                                                             method: 'GET',
                                                                             data: { _token: '{{ csrf_token() }}' },
                                                                             success: function () {
@@ -249,14 +249,14 @@
                                                                 const commentText = form.find('input[name="comment_text"]').val();
 
                                                                 $.ajax({
-                                                                    url: '/store-comments',
+                                                                    url: '{{ route("store.comments") }}',
                                                                     method: 'POST',
                                                                     data: form.serialize(),
                                                                     success: function (response) {
                                                                         let newComment = `
                                                                             <li class="mb-2">
-                                                                                <strong>${response.comment.user_id}:</strong> 
-                                                                                ${response.comment.comment_text} 
+                                                                                <strong>${response.comment.user_id}:</strong>
+                                                                                ${response.comment.comment_text}
                                                                                 <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
                                                                             </li>`;
 
@@ -313,7 +313,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         $.ajax({
-                                                            url: '/bulk-delete-task',
+                                                            url: '{{ route("bulk.delete.task") }}',
                                                             method: 'POST',
                                                             data: {
                                                                 ids: selectedIds,

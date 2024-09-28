@@ -26,7 +26,7 @@
                                         <h3>User Data</h3>
                                     </div>
                                     <div class="w-50 text-end">
-                                        <a href="/add-users" class="btn btn-primary">
+                                        <a href="users/add" class="btn btn-primary">
                                             <i class="ti ti-plus me-sm-1"></i>Add User
                                         </a>
 
@@ -80,7 +80,7 @@
                                         $(document).ready(function() {
                                             $.ajax({
                                                 type: "GET",
-                                                url: "/fetch-users",
+                                                url: "/admin/users/fetch-users",
                                                 dataType: "json",
                                                 success: function(response) {
                                                     $('#example').DataTable().clear().destroy();
@@ -99,7 +99,7 @@
                                                             item.joining_date,
                                                             item.birth_date,
                                                             `<div>
-                                                                <a href="/users-edit/${item.id}" class="btn btn-sm btn-icon item-edit">
+                                                                <a href="/admin/users/edit/${item.id}" class="btn btn-sm btn-icon item-edit">
                                                                     <i class="text-primary ti ti-pencil"></i>
                                                                 </a>
                                                                 <a class="btn btn-sm btn-icon item-delete" href="#" data-id="${item.id}">
@@ -140,7 +140,8 @@
                                                                 }).then((result) => {
                                                                     if (result.isConfirmed) {
                                                                         $.ajax({
-                                                                            url: `/users-delete/${id}`,
+                                                                            // url: `/admin/users/delete/${id}`,
+                                                                            url: '{{ route("users.delete", ":id") }}'.replace(':id', id),
                                                                             method: 'GET',
                                                                             data: {
                                                                                 _token: '{{ csrf_token() }}'
@@ -194,7 +195,7 @@
 
 
                                                                         $.ajax({
-                                                                            url: '/send-invitation',
+                                                                            url: '/admin/users/send-invitation',
                                                                             method: 'POST',
                                                                             data: {
                                                                                 email: email,
@@ -258,7 +259,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         $.ajax({
-                                                            url: '/bulk-delete-users',
+                                                            url: '{{ route("bulk.delete.user") }}',
                                                             method: 'POST',
                                                             data: {
                                                                 ids: selectedIds,

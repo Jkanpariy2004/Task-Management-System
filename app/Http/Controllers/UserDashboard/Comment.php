@@ -31,24 +31,11 @@ class Comment extends Controller
 
         return response()->json([
             'success' => true,
-            'user' => $userData, 
+            'user' => $userData,
             'comment' => $comment
         ]);
 
         return response()->json($response);
     }
-
-    public function destroy($id)
-    {
-        $comment = dbcomment::find($id);
-        
-        if ($comment) {
-            $comment->delete();
-            return response()->json(['success' => true]);
-        }
-        
-        return response()->json(['success' => false]);
-    }
-
 
 }

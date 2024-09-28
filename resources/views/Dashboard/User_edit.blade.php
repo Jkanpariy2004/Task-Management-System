@@ -119,7 +119,7 @@
                         timerProgressBar: true,
                         confirmButtonText: 'OK'
                     }).then(function() {
-                        window.location.href = '/users';
+                        window.location.href = '/admin/users';
                     });
                 },
                 error: function(xhr) {

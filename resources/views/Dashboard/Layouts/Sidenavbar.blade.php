@@ -28,7 +28,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ Request::is('dashboard') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('admin/dashboard') ? 'active' : '' }}">
             <a href="/dashboard" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
@@ -38,27 +38,27 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Apps &amp; Pages</span>
         </li>
-        <li class="menu-item {{ Request::is('users', 'add-users', 'users-edit/*') ? 'active' : '' }}">
-            <a href="/users" class="menu-link">
+        <li class="menu-item {{ Request::is('admin/users', 'admin/users/add', 'admin/users/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('users') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div data-i18n="users">users</div>
             </a>
         </li>
 
-        <li class="menu-item {{ Request::is('company', 'add-company', 'company-edit/*') ? 'active' : '' }}">
-            <a href="/company" class="menu-link">
+        <li class="menu-item {{ Request::is('admin/company', 'admin/company/add', 'admin/company/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('company') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-building"></i>
                 <div data-i18n="Company">Company</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('task', 'add-task', 'task-edit/*') ? 'active' : '' }}">
-            <a href="/task" class="menu-link">
+        <li class="menu-item {{ Request::is('admin/task', 'admin/task/add', 'admin/task/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('task') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                 <div data-i18n="Task">Task</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('Cache-Setting') ? 'active' : '' }}">
-            <a href="/Cache-Setting" class="menu-link">
+        <li class="menu-item {{ Request::is('admin/cache') ? 'active' : '' }}">
+            <a href="{{ route('cache') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Cache">Cache</div>
             </a>

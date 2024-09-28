@@ -40,14 +40,14 @@
     }
 
     .comments-display {
-        flex: 1; 
-        overflow-y: auto; 
+        flex: 1;
+        overflow-y: auto;
         padding-bottom: 20px;
     }
 
     .comment-input {
         position: absolute;
-        bottom: 10px; 
+        bottom: 10px;
         left: 0;
         right: 0;
     }
@@ -68,7 +68,7 @@
 
     .comments-list {
         max-height: 500px;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
 
 </style>
@@ -96,7 +96,7 @@
                                         <i class="fa-solid fa-grip-vertical icon me-2 mt-1"></i>
                                         <h5 class="mb-0">My Work</h5>
                                     </div>
-                                    
+
                                     <ul class="nav nav-tabs mt-3" id="myTab" role="tablist" style="margin-right: 0rem !important; margin-left: 0rem !important;">
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">To Do</button>
@@ -108,7 +108,7 @@
                                             <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">Delegated</button>
                                         </li>
                                     </ul>
-                                    
+
                                     <div class="tab-content p-0 mt-3" id="myTabContent">
                                         <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
                                             <!-- Accordion for To Do -->
@@ -123,12 +123,12 @@
                                                         <div class="accordion-body">
                                                             @foreach($todayTask as $task)
                                                                 <div class="px-1">
-                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer" 
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#taskModal{{ $task->id }}" 
-                                                                        data-title="{{ $task->title }}" 
-                                                                        data-description="{{ $task->description }}" 
-                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}" 
+                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#taskModal{{ $task->id }}"
+                                                                        data-title="{{ $task->title }}"
+                                                                        data-description="{{ $task->description }}"
+                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}"
                                                                         data-priority="{{ $task->priority }}">
                                                                         <div class="d-flex">
                                                                             <i class="fas fa-clock me-2 mt-2"></i>
@@ -150,11 +150,11 @@
                                                                             <p class="m-0 p-0 text-dark">{{ $task->priority }}</p>
                                                                         </div>
                                                                         <div class="mx-2 d-flex align-items-center">
-                                                                            <i class="fa-solid fa-flag 
-                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                            <i class="fa-solid fa-flag
+                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                 @endif">
                                                                             </i>
                                                                         </div>
@@ -213,18 +213,18 @@
                                                                                                             : <span>{{ $user->name }}</span>
                                                                                                         </td>
                                                                                                     </tr>
-                                                                                                    
+
                                                                                                     <tr class="my-2">
                                                                                                         <th>
                                                                                                             <i class="fa-solid fa-flag mr-1"></i>
                                                                                                             <span class="fw-bold">Priority</span>
                                                                                                         </th>
                                                                                                         <td>
-                                                                                                        : <i class="fa-solid fa-flag 
-                                                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                                                        : <i class="fa-solid fa-flag
+                                                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                                                 @endif">
                                                                                                             </i>
                                                                                                             <span>{{ $task->priority }}</span>
@@ -271,8 +271,8 @@
                                                                                                     <ul>
                                                                                                         @foreach($comments as $comment)
                                                                                                             <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
-                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong>
+                                                                                                                {{ $comment->comment_text }}
                                                                                                                 <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
                                                                                                             </li>
                                                                                                         @endforeach
@@ -288,7 +288,7 @@
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
-                                                                                            
+
                                                                                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
                                                                                                 $(document).ready(function() {
@@ -302,14 +302,14 @@
                                                                                                         submitButton.prop('disabled', true);
 
                                                                                                         $.ajax({
-                                                                                                            url: '/comments-store',
+                                                                                                            url: '{{ route("comments.store") }}',
                                                                                                             method: 'POST',
                                                                                                             data: form.serialize(),
                                                                                                             success: function (response) {
                                                                                                                 let newComment = `
                                                                                                                     <li class="mb-2">
-                                                                                                                        <strong>${response.comment.user_id}:</strong> 
-                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <strong>${response.comment.user_id}:</strong>
+                                                                                                                        ${response.comment.comment_text}
                                                                                                                         <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
                                                                                                                     </li>`;
 
@@ -357,12 +357,12 @@
                                                         <div class="accordion-body">
                                                             @foreach($dueTasks as $task)
                                                                 <div class="px-1">
-                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer" 
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#taskModalDuetasks{{ $task->id }}" 
-                                                                        data-title="{{ $task->title }}" 
-                                                                        data-description="{{ $task->description }}" 
-                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}" 
+                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#taskModalDuetasks{{ $task->id }}"
+                                                                        data-title="{{ $task->title }}"
+                                                                        data-description="{{ $task->description }}"
+                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}"
                                                                         data-priority="{{ $task->priority }}">
                                                                         <div class="d-flex">
                                                                             <i class="fas fa-clock me-2 mt-2"></i>
@@ -386,11 +386,11 @@
                                                                             <p class="m-0 p-0 text-dark">{{ $task->priority }}</p>
                                                                         </div>
                                                                         <div class="mx-2 d-flex align-items-center">
-                                                                            <i class="fa-solid fa-flag 
-                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                            <i class="fa-solid fa-flag
+                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                 @endif">
                                                                             </i>
                                                                         </div>
@@ -449,18 +449,18 @@
                                                                                                             : <span>{{ $user->name }}</span>
                                                                                                         </td>
                                                                                                     </tr>
-                                                                                                    
+
                                                                                                     <tr class="my-2">
                                                                                                         <th>
                                                                                                             <i class="fa-solid fa-flag mr-1"></i>
                                                                                                             <span class="fw-bold">Priority</span>
                                                                                                         </th>
                                                                                                         <td>
-                                                                                                        : <i class="fa-solid fa-flag 
-                                                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                                                        : <i class="fa-solid fa-flag
+                                                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                                                 @endif">
                                                                                                             </i>
                                                                                                             <span>{{ $task->priority }}</span>
@@ -505,8 +505,8 @@
                                                                                                     <ul>
                                                                                                         @foreach($comments as $comment)
                                                                                                             <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
-                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong>
+                                                                                                                {{ $comment->comment_text }}
                                                                                                                 <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
                                                                                                             </li>
                                                                                                         @endforeach
@@ -522,7 +522,7 @@
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
-                                                                                            
+
                                                                                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
                                                                                                 $(document).ready(function() {
@@ -536,14 +536,14 @@
                                                                                                         submitButton.prop('disabled', true);
 
                                                                                                         $.ajax({
-                                                                                                            url: '/comments-store',
+                                                                                                            url: '{{ route("comments.store") }}',
                                                                                                             method: 'POST',
                                                                                                             data: form.serialize(),
                                                                                                             success: function (response) {
                                                                                                                 let newComment = `
                                                                                                                     <li class="mb-2">
-                                                                                                                        <strong>${response.comment.user_id}:</strong> 
-                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <strong>${response.comment.user_id}:</strong>
+                                                                                                                        ${response.comment.comment_text}
                                                                                                                         <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
                                                                                                                     </li>`;
 
@@ -591,12 +591,12 @@
                                                         <div class="accordion-body">
                                                             @foreach($NextTasks as $task)
                                                                 <div class="px-1">
-                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer" 
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#taskModalNextTasks{{ $task->id }}" 
-                                                                        data-title="{{ $task->title }}" 
-                                                                        data-description="{{ $task->description }}" 
-                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}" 
+                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#taskModalNextTasks{{ $task->id }}"
+                                                                        data-title="{{ $task->title }}"
+                                                                        data-description="{{ $task->description }}"
+                                                                        data-due-date="{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}"
                                                                         data-priority="{{ $task->priority }}">
                                                                         <div class="d-flex">
                                                                             <i class="fas fa-clock me-2 mt-2"></i>
@@ -620,11 +620,11 @@
                                                                             <p class="m-0 p-0 text-dark">{{ $task->priority }}</p>
                                                                         </div>
                                                                         <div class="mx-2 d-flex align-items-center">
-                                                                            <i class="fa-solid fa-flag 
-                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                            <i class="fa-solid fa-flag
+                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                 @endif">
                                                                             </i>
                                                                         </div>
@@ -688,18 +688,18 @@
                                                                                                             : <span>{{ $user->name }}</span>
                                                                                                         </td>
                                                                                                     </tr>
-                                                                                                    
+
                                                                                                     <tr class="my-2">
                                                                                                         <th>
                                                                                                             <i class="fa-solid fa-flag mr-1"></i>
                                                                                                             <span class="fw-bold">Priority</span>
                                                                                                         </th>
                                                                                                         <td>
-                                                                                                        : <i class="fa-solid fa-flag 
-                                                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                                                        : <i class="fa-solid fa-flag
+                                                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                                                 @endif">
                                                                                                             </i>
                                                                                                             <span>{{ $task->priority }}</span>
@@ -744,8 +744,8 @@
                                                                                                     <ul>
                                                                                                         @foreach($comments as $comment)
                                                                                                             <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
-                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong>
+                                                                                                                {{ $comment->comment_text }}
                                                                                                                 <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
                                                                                                             </li>
                                                                                                         @endforeach
@@ -761,7 +761,7 @@
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
-                                                                                            
+
                                                                                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
                                                                                                 $(document).ready(function() {
@@ -775,14 +775,14 @@
                                                                                                         submitButton.prop('disabled', true);
 
                                                                                                         $.ajax({
-                                                                                                            url: '/comments-store',
+                                                                                                            url: '{{ route("comments.store") }}',
                                                                                                             method: 'POST',
                                                                                                             data: form.serialize(),
                                                                                                             success: function (response) {
                                                                                                                 let newComment = `
                                                                                                                     <li class="mb-2">
-                                                                                                                        <strong>${response.comment.user_id}:</strong> 
-                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <strong>${response.comment.user_id}:</strong>
+                                                                                                                        ${response.comment.comment_text}
                                                                                                                         <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
                                                                                                                     </li>`;
 
@@ -830,12 +830,12 @@
                                                         <div class="accordion-body">
                                                             @foreach($UnscheduledTask as $task)
                                                                 <div class="px-1">
-                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer" 
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#taskModalUndefinetask{{ $task->id }}" 
-                                                                        data-title="{{ $task->title }}" 
-                                                                        data-description="{{ $task->description }}" 
-                                                                        data-due-date="{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Not Scheduled' }}" 
+                                                                    <div class="task-item d-flex align-items-center border-top border-bottom p-2 m-1 cursor-pointer"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#taskModalUndefinetask{{ $task->id }}"
+                                                                        data-title="{{ $task->title }}"
+                                                                        data-description="{{ $task->description }}"
+                                                                        data-due-date="{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Not Scheduled' }}"
                                                                         data-priority="{{ $task->priority }}">
                                                                         <div class="d-flex">
                                                                             <i class="fas fa-clock me-2 mt-2"></i>
@@ -859,11 +859,11 @@
                                                                             <p class="m-0 p-0 text-dark">{{ $task->priority }}</p>
                                                                         </div>
                                                                         <div class="mx-2 d-flex align-items-center">
-                                                                            <i class="fa-solid fa-flag 
-                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                            <i class="fa-solid fa-flag
+                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                 @endif">
                                                                             </i>
                                                                         </div>
@@ -922,18 +922,18 @@
                                                                                                             : <span>{{ $user->name }}</span>
                                                                                                         </td>
                                                                                                     </tr>
-                                                                                                    
+
                                                                                                     <tr class="my-2">
                                                                                                         <th>
                                                                                                             <i class="fa-solid fa-flag mr-1"></i>
                                                                                                             <span class="fw-bold">Priority</span>
                                                                                                         </th>
                                                                                                         <td>
-                                                                                                        : <i class="fa-solid fa-flag 
-                                                                                                                @if($task->priority === 'Urgent') text-danger 
-                                                                                                                @elseif($task->priority === 'High Priority') text-warning 
-                                                                                                                @elseif($task->priority === 'Normal Priority') text-info 
-                                                                                                                @elseif($task->priority === 'Low Priority') text-muted 
+                                                                                                        : <i class="fa-solid fa-flag
+                                                                                                                @if($task->priority === 'Urgent') text-danger
+                                                                                                                @elseif($task->priority === 'High Priority') text-warning
+                                                                                                                @elseif($task->priority === 'Normal Priority') text-info
+                                                                                                                @elseif($task->priority === 'Low Priority') text-muted
                                                                                                                 @endif">
                                                                                                             </i>
                                                                                                             <span>{{ $task->priority }}</span>
@@ -978,8 +978,8 @@
                                                                                                     <ul>
                                                                                                         @foreach($comments as $comment)
                                                                                                             <li class="mb-2" data-comment-id="{{ $comment->id }}">
-                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong> 
-                                                                                                                {{ $comment->comment_text }} 
+                                                                                                                <strong>{{ $comment->user_id ?? 'Anonymous' }}:</strong>
+                                                                                                                {{ $comment->comment_text }}
                                                                                                                 <small>{{ \Carbon\Carbon::parse($comment->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i a') }}</small>
                                                                                                             </li>
                                                                                                         @endforeach
@@ -995,7 +995,7 @@
                                                                                                     <button type="submit" class="btn btn-primary">Send</button>
                                                                                                 </div>
                                                                                             </form>
-                                                                                            
+
                                                                                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                                             <script>
                                                                                                 $(document).ready(function() {
@@ -1009,14 +1009,14 @@
                                                                                                         submitButton.prop('disabled', true);
 
                                                                                                         $.ajax({
-                                                                                                            url: '/comments-store',
+                                                                                                            url: '{{ route("comments.store") }}',
                                                                                                             method: 'POST',
                                                                                                             data: form.serialize(),
                                                                                                             success: function (response) {
                                                                                                                 let newComment = `
                                                                                                                     <li class="mb-2">
-                                                                                                                        <strong>${response.comment.user_id}:</strong> 
-                                                                                                                        ${response.comment.comment_text} 
+                                                                                                                        <strong>${response.comment.user_id}:</strong>
+                                                                                                                        ${response.comment.comment_text}
                                                                                                                         <small>${new Date(response.comment.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })}</small>
                                                                                                                     </li>`;
 
