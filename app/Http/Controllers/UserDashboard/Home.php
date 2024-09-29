@@ -8,39 +8,35 @@ use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
 use App\Models\Users as dbuser;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Home extends Controller
 {
     public function index()
     {
-        if (!Session::has('email')) {
-            return redirect('/user')->with('error', 'Please login to access this page.');
-        }
+        $AuthUser = Auth::guard('user')->user();
+        $userEmail = $AuthUser->email; // Assuming the email field exists
 
-        $userEmail = Session::get('email');
-        
         $userData = DB::table('user')
             ->where('email', $userEmail)
             ->first();
-        
+
         if ($userData) {
             $user = DB::table('user')
                 ->leftJoin('company', 'user.company', '=', 'company.id')
                 ->select('user.*', 'company.c_name')
                 ->where('user.id', $userData->id)
                 ->first();
-        }
-
-        if (!$userData) {
-            return redirect()->back()->with('error', 'User not found.');
+        } else {
+            return redirect()->route('user.login')->with('error', 'User not logged in.');
         }
 
         $UserId = $userData->id;
         $UserTaskData = dbassign_task::where('user_id', $UserId)->pluck('task_id');
 
         $TaskData = dbtask::whereIn('id', $UserTaskData)->get()->map(function ($task) {
-            $task->attachments = json_decode($task->attechments); 
+            $task->attachments = json_decode($task->attechments);
             return $task;
         });
 
@@ -57,7 +53,7 @@ class Home extends Controller
         $NextTasks = $TaskData->filter(function ($task) use ($date) {
             return $task->start_date > $date || $task->due_date > $date;
         });
-        $NextTasksCount = $NextTasks->count(); 
+        $NextTasksCount = $NextTasks->count();
 
         $UnscheduledTask = $TaskData->filter(function ($task) use ($date) {
             return ($task->start_date == null && $task->due_date == null);
@@ -70,8 +66,8 @@ class Home extends Controller
 
         $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
 
-        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount','users','comments');
-        
+        $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount', 'users', 'comments');
+
         return view('UserDashboard.User-Dashboard', $data);
     }
 

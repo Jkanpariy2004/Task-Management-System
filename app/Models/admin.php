@@ -12,4 +12,8 @@ class admin extends Authenticatable
     protected $table = 'admin';
     protected $fillable = ['name', 'email', 'password'];
     protected $hidden = ['password'];
+
+    public function getAuthPassword() {
+        return $this->password;
+    }
 }

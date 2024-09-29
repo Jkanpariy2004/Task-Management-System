@@ -9,10 +9,6 @@ use Illuminate\Support\Facades\Artisan;
 class CacheClear extends Controller
 {
     public function index(){
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
-        
         return view('Dashboard.cache');
     }
     public function clearCache()

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Authenticate
+class UserAuthenticate
 {
     /**
      * Handle an incoming request.
@@ -18,8 +18,8 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login')->with('error', 'Please login to access this page.');
+        if (!Auth::guard('user')->check()) {
+            return redirect()->route('user.login')->with('error', 'Please login to access this page.');
         }
 
         return $next($request);

@@ -12,14 +12,11 @@ use App\Models\Users as dbusers;
 use App\Models\Comment as dbcomment;
 use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
+use Illuminate\Support\Facades\Auth;
 
 class Task extends Controller
 {
     public function index(){
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
 
         return view('Dashboard.Task', compact('comments'));
@@ -36,10 +33,6 @@ class Task extends Controller
 
     public function AddTask()
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $users = dbusers::all();
         return view('Dashboard.Add-Task',compact('users'));
     }
@@ -193,10 +186,6 @@ class Task extends Controller
 
     public function edit($id)
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $users = dbusers::all();
         $show = dbtask::all();
         $new = dbtask::find($id);
@@ -240,7 +229,8 @@ class Task extends Controller
             'post_id' => 'required|integer',
         ]);
 
-        $FetchUser = Session::get('adminemail');
+        $AuthUser = Auth::guard('admin')->user();
+        $FetchUser = $AuthUser->email;
 
         if (!$FetchUser) {
             return response()->json([

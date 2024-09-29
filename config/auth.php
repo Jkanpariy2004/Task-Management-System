@@ -36,11 +36,16 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'user' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins', // This should point to the correct admin provider
+        ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -62,14 +67,15 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Users::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\admin::class, // Make sure this model exists
+        ],
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------

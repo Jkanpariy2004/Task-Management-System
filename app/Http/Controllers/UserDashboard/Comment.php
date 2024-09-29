@@ -19,7 +19,9 @@ class Comment extends Controller
             'post_id' => 'required|integer',
         ]);
 
-        $FetchUser = Session::get('email');
+        $AuthUser = Auth::guard('user')->user();
+        $FetchUser = $AuthUser->email;
+
         $userData = DB::table('user')->where('email', $FetchUser)->first();
         $UserName = $userData->name;
 

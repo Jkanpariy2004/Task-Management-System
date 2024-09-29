@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\Session;
 class Company extends Controller
 {
     public function index(){
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         return view('Dashboard.Company');
     }
 
@@ -29,10 +25,6 @@ class Company extends Controller
 
     public function AddCompany()
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         return view('Dashboard.Add-Company');
     }
 
@@ -74,10 +66,6 @@ class Company extends Controller
 
     public function edit($id)
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $show = dbcompany::all();
         $new = dbcompany::find($id);
         $url = url('/company-update/' . $id);

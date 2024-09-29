@@ -2,12 +2,33 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Users extends Model
+class Users extends Authenticatable
 {
     use HasFactory;
-    protected $table ='user';
-    protected $primaryKey = 'id';
+
+    protected $table = 'user';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'token',
+        'mobile',
+        'designation',
+        'company',
+        'joining_date',
+        'birth_date'
+    ];
+
+    protected $hidden = [
+        'password'
+    ];
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
 }

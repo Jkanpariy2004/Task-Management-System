@@ -18,21 +18,13 @@ class Users extends Controller
 {
     public function index()
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         return view('Dashboard.Users');
     }
 
     public function AddUsers()
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $companys = dbcompany::all();
-        return view('Dashboard.Add-Users',compact('companys'));
+        return view('Dashboard.Add-Users', compact('companys'));
     }
 
     public function FetchUsers()
@@ -130,15 +122,11 @@ class Users extends Controller
 
     public function edit($id)
     {
-        // if (!Session::has('adminemail')) {
-        //     return redirect('/admin')->with('error', 'Please login to access this page.');
-        // }
-
         $companys = dbcompany::all();
         $show = dbusers::all();
         $new = dbusers::find($id);
         $url = url('/admin/users/update/' . $id);
-        $com = compact('show', 'new', 'url','companys');
+        $com = compact('show', 'new', 'url', 'companys');
         return view('Dashboard.User_edit', $com);
     }
 
@@ -181,7 +169,7 @@ class Users extends Controller
 
         $user->token = $token;
         $user->save();
-        $passwordCreationUrl = url('/admin/users/password-creation-form?token='.$token);
+        $passwordCreationUrl = url('/admin/users/password-creation-form?token=' . $token);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
 
@@ -193,7 +181,7 @@ class Users extends Controller
         $user = $request->query('user');
         $token = $request->query('token');
 
-        return view('Dashboard.PasswordCreationForm', compact('user','token'));
+        return view('Dashboard.PasswordCreationForm', compact('user', 'token'));
     }
 
     public function store(Request $request)
