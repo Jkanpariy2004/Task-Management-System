@@ -1,55 +1,6 @@
 <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
 <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="/assets/css/demo.css" />
-<style>
-    td .model-dialog {
-        text-align: left !important;
-    }
-
-    .comment-section {
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-
-    .comments-display {
-        flex: 1;
-        overflow-y: auto;
-        padding-bottom: 20px;
-    }
-
-    .comment-input {
-        position: absolute;
-        bottom: 10px;
-        left: 0;
-        right: 0;
-        padding: 20px;
-    }
-
-    .comment {
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-    }
-
-    .comment-author {
-        font-weight: bold;
-    }
-
-    .comment-time {
-        font-size: 0.9em;
-        color: #777;
-    }
-
-    .comments-list {
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-</style>
-
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 

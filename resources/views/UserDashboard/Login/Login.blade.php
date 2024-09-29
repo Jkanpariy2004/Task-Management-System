@@ -105,28 +105,6 @@
 
                     <form class="mb-3" id="LoginForm">
                         @csrf
-                        <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            @if(session('success'))
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: "{{ session('success') }}",
-                                confirmButtonText: 'OK'
-                            });
-                            @endif
-
-                            @if(session('error'))
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: "{{ session('error') }}",
-                                confirmButtonText: 'OK'
-                            });
-                            @endif
-
-                        });
-                        </script>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" id="email" name="email"
@@ -141,7 +119,7 @@
                                 <input type="password" id="password" class="form-control" name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password" />
-                                    <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                 <div class="invalid-feedback" id="password-error"></div>
                             </div>
                         </div>
@@ -151,6 +129,27 @@
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                @if (session('success'))
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: "{{ session('success') }}",
+                                        confirmButtonText: 'OK'
+                                    });
+                                @endif
+
+                                @if (session('error'))
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: "{{ session('error') }}",
+                                        confirmButtonText: 'OK'
+                                    });
+                                @endif
+
+                            });
+
                             $('#LoginForm').on('submit', function(e) {
                                 e.preventDefault();
 
@@ -188,7 +187,8 @@
                                         } else {
                                             Swal.fire({
                                                 title: 'Error!',
-                                                text: xhr.responseJSON.errors || 'Please Enter Valid email or password.',
+                                                text: xhr.responseJSON.errors ||
+                                                    'Please Enter Valid email or password.',
                                                 icon: 'error',
                                                 confirmButtonText: 'OK'
                                             });

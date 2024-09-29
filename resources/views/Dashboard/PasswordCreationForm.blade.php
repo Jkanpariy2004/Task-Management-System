@@ -7,62 +7,7 @@
     <title>Password Creation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        }
-        h2 {
-            margin-bottom: 20px;
-            font-family: 'Avenir', sans-serif;
-        }
-        .form-label {
-            font-weight: bold;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .invalid-feedback {
-            background-color: transparent;
-            padding: 0;
-            color: red;
-            border: none;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-        .invalid-feedback{
-            opacity: 0;
-            animation: slideIn 0.5s forwards;
-            font-weight: 700;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .invalid-feedback{
-            display: block;
-            color: red;
-            margin-top: 0px;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/email.css" />
 </head>
 <body>
     <div class="container mt-5">
