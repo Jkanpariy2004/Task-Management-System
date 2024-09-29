@@ -16,30 +16,30 @@ use App\Models\Assign_Task as dbassign_task;
 class Task extends Controller
 {
     public function index(){
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
 
         $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
-        
+
         return view('Dashboard.Task', compact('comments'));
     }
 
     public function FetchTask()
     {
         $tasks = dbtask::all();
-        
+
         return response()->json([
             'tasks' => $tasks,
         ]);
     }
-    
+
     public function AddTask()
     {
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
-        
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
+
         $users = dbusers::all();
         return view('Dashboard.Add-Task',compact('users'));
     }
@@ -53,7 +53,7 @@ class Task extends Controller
             'assign.required' => 'Please Select Task Assign User.',
             'priority.required' => 'Please Select Task Priority.',
         ];
-    
+
         $validator = Validator::make($request->all(), [
             'task_title' => 'required',
             'task_description' => 'required',
@@ -64,25 +64,25 @@ class Task extends Controller
             'attechments' => 'required|array|max:30',
             'attechments.*' => 'mimes:jpeg,png,jpg,pdf|max:20480'
         ], $message);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         $task = new dbtask();
         $task->title = $request->input('task_title');
         $task->description = $request->input('task_description');
         $task->start_date = $request->input('start_date');
         $task->due_date = $request->input('due_date');
         $task->priority = $request->input('priority');
-    
+
         if ($request->hasFile('attechments')) {
             $otherImages = $request->file('attechments');
             $imageNames = [];
             $errorMessages = [];
-    
+
             $sanitizedTitle = preg_replace('/[^a-zA-Z0-9-_\.]/', '_', strtolower($task->title));
-    
+
             foreach ($otherImages as $index => $image) {
                 $imageNameOther = $sanitizedTitle . '_' . ($index + 1) . '.' . $image->getClientOriginalExtension();
                 if ($image->isValid()) {
@@ -92,30 +92,30 @@ class Task extends Controller
                     $errorMessages[] = "The attachment '{$imageNameOther}' failed to upload.";
                 }
             }
-    
+
             if (!empty($errorMessages)) {
                 return response()->json(['errors' => $errorMessages], 422);
             }
-    
+
             $task->attechments = json_encode($imageNames);
-        }        
-    
+        }
+
         if ($task->save()) {
             $assign_task = new dbassign_task();
             $assign_task->task_id = $task->id;
             $assign_task->user_id = $request->input('assign');
-    
+
             if ($assign_task->save()) {
                 return response()->json(['message' => 'Task created & assigned successfully!'], 200);
             } else {
-                $task->delete(); 
+                $task->delete();
                 return response()->json(['message' => 'Task assignment failed!'], 500);
             }
         }
-    
+
         return response()->json(['message' => 'Task creation failed!'], 500);
     }
-    
+
     public function TaskUpdate(Request $request, $id)
     {
         $message = [
@@ -193,9 +193,9 @@ class Task extends Controller
 
     public function edit($id)
     {
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
 
         $users = dbusers::all();
         $show = dbtask::all();
@@ -241,7 +241,7 @@ class Task extends Controller
         ]);
 
         $FetchUser = Session::get('adminemail');
-        
+
         if (!$FetchUser) {
             return response()->json([
                 'success' => false,

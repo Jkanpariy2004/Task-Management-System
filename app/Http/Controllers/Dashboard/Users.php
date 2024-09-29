@@ -18,18 +18,18 @@ class Users extends Controller
 {
     public function index()
     {
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
 
         return view('Dashboard.Users');
     }
 
     public function AddUsers()
     {
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
 
         $companys = dbcompany::all();
         return view('Dashboard.Add-Users',compact('companys'));
@@ -130,9 +130,9 @@ class Users extends Controller
 
     public function edit($id)
     {
-        if (!Session::has('adminemail')) {
-            return redirect('/admin')->with('error', 'Please login to access this page.');
-        }
+        // if (!Session::has('adminemail')) {
+        //     return redirect('/admin')->with('error', 'Please login to access this page.');
+        // }
 
         $companys = dbcompany::all();
         $show = dbusers::all();
