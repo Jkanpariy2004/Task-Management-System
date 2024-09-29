@@ -50,6 +50,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', 'logout')->name('admin.logout');
     });
 
+    Route::get('users/password-creation-form', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
+    Route::post('users/password-creation', [Users::class, 'store']);
+
     Route::middleware('auth.admin')->group(function () {
         Route::get('/dashboard', [Index::class, 'index']);
 
@@ -62,8 +65,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/edit/{id}', 'edit');
             Route::post('/update/{id}', 'UserUpdate')->name('users.update');
             Route::post('/send-invitation', 'sendInvitation');
-            Route::get('/password-creation-form', 'showPasswordCreationForm')->name('password.creation.form');
-            Route::post('/password-creation', 'store');
+            // Route::get('/password-creation-form', 'showPasswordCreationForm')->name('password.creation.form');
+            // Route::post('/password-creation', 'store');
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.user');
         });
 

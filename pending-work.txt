@@ -2,7 +2,7 @@
 2.login using auth/breeze(complete)
 3.css change in all file(complete)
 4.script add end of the code in all file(complete)
-5.blade file re order
+5.blade file re order(complete)
 6.constsnt file declare
 7.custome middleware
 8.datatable call in ajax
