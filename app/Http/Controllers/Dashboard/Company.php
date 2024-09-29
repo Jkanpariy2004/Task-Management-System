@@ -4,23 +4,43 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Company As dbcompany;
+use App\Models\Company as dbcompany;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 
 class Company extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('Dashboard.Company.Company');
     }
 
-    public function FetchCompany()
-    {
-        $companys = dbcompany::all();
+    // public function FetchCompany()
+    // {
+    //     $companys = dbcompany::all();
 
-        return response()->json([
-            'companys' => $companys,
-        ]);
+    //     return response()->json([
+    //         'companys' => $companys,
+    //     ]);
+    // }
+    public function fetchCompany()
+    {
+        $companies = dbcompany::all();
+
+        $data = [];
+        foreach ($companies as $company) {
+            $data[] = [
+                'id' => $company->id,
+                'c_name' => $company->c_name,
+                'c_email' => $company->c_email,
+                'c_phone_no' => $company->c_phone_no,
+                'c_address' => $company->c_address,
+                'city' => $company->city,
+                'country' => $company->country,
+            ];
+        }
+
+        return response()->json(['companys' => $data]);
     }
 
     public function AddCompany()
@@ -28,7 +48,8 @@ class Company extends Controller
         return view('Dashboard.Company.Add-Company');
     }
 
-    public function SubmitCompany(Request $request){
+    public function SubmitCompany(Request $request)
+    {
         $message = [
             'c_name.required' => 'Please Enter Company Name.',
             'c_email.required' => 'Please Enter Company Name.,',
@@ -73,7 +94,8 @@ class Company extends Controller
         return view('Dashboard.Company.Company_edit', $com);
     }
 
-    public function CompanyUpdate(Request $request , $id){
+    public function CompanyUpdate(Request $request, $id)
+    {
         $message = [
             'c_name.required' => 'Please Enter Company Name.',
             'c_email.required' => 'Please Enter Company Name.,',
