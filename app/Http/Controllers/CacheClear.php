@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 class CacheClear extends Controller
 {
     public function index(){
-        return view('Dashboard.cache');
+        return view('Dashboard.Cache.cache');
     }
     public function clearCache()
     {

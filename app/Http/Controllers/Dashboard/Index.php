@@ -9,6 +9,6 @@ use Illuminate\Support\Facades\Session;
 class Index extends Controller
 {
     public function index(){
-        return view('Dashboard.Index');
+        return view('Dashboard.Index.Index');
     }
 }

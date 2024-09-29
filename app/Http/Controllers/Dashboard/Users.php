@@ -18,13 +18,13 @@ class Users extends Controller
 {
     public function index()
     {
-        return view('Dashboard.Users');
+        return view('Dashboard.User.Users');
     }
 
     public function AddUsers()
     {
         $companys = dbcompany::all();
-        return view('Dashboard.Add-Users', compact('companys'));
+        return view('Dashboard.User.Add-Users', compact('companys'));
     }
 
     public function FetchUsers()
@@ -127,7 +127,7 @@ class Users extends Controller
         $new = dbusers::find($id);
         $url = url('/admin/users/update/' . $id);
         $com = compact('show', 'new', 'url', 'companys');
-        return view('Dashboard.User_edit', $com);
+        return view('Dashboard.User.User_edit', $com);
     }
 
     public function UsersDelete($id)
@@ -181,7 +181,7 @@ class Users extends Controller
         $user = $request->query('user');
         $token = $request->query('token');
 
-        return view('Dashboard.PasswordCreationForm', compact('user', 'token'));
+        return view('Dashboard.Emails.PasswordCreationForm', compact('user', 'token'));
     }
 
     public function store(Request $request)

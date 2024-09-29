@@ -19,7 +19,7 @@ class Task extends Controller
     public function index(){
         $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();
 
-        return view('Dashboard.Task', compact('comments'));
+        return view('Dashboard.Task.Task', compact('comments'));
     }
 
     public function FetchTask()
@@ -34,7 +34,7 @@ class Task extends Controller
     public function AddTask()
     {
         $users = dbusers::all();
-        return view('Dashboard.Add-Task',compact('users'));
+        return view('Dashboard.Task.Add-Task',compact('users'));
     }
 
     public function SubmitTask(Request $request) {
@@ -197,7 +197,7 @@ class Task extends Controller
 
         $url = url('/users-update/' . $id);
         $com = compact('show', 'new', 'url', 'users', 'assignedUserId', 'existingAttachments');
-        return view('Dashboard.Task_edit', $com);
+        return view('Dashboard.Task.Task_edit', $com);
     }
 
     public function TaskDelete($id)

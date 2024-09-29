@@ -68,7 +68,7 @@ class Home extends Controller
 
         $data = compact('userData', 'UserId', 'UserTaskData', 'TaskData', 'user', 'TaskDate', 'date', 'todayTask', 'todayTasksCount', 'dueTasks', 'dueTasksCount', 'NextTasks', 'NextTasksCount', 'UnscheduledTask', 'UnscheduledCount', 'users', 'comments');
 
-        return view('UserDashboard.User-Dashboard', $data);
+        return view('UserDashboard.Home.User-Dashboard', $data);
     }
 
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 class Company extends Controller
 {
     public function index(){
-        return view('Dashboard.Company');
+        return view('Dashboard.Company.Company');
     }
 
     public function FetchCompany()
@@ -25,7 +25,7 @@ class Company extends Controller
 
     public function AddCompany()
     {
-        return view('Dashboard.Add-Company');
+        return view('Dashboard.Company.Add-Company');
     }
 
     public function SubmitCompany(Request $request){
@@ -70,7 +70,7 @@ class Company extends Controller
         $new = dbcompany::find($id);
         $url = url('/company-update/' . $id);
         $com = compact('show', 'new', 'url');
-        return view('Dashboard.Company_edit', $com);
+        return view('Dashboard.Company.Company_edit', $com);
     }
 
     public function CompanyUpdate(Request $request , $id){
