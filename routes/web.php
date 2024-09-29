@@ -40,13 +40,19 @@ Route::prefix('user')->group(function () {
 // Admin Panel Route //
 // // // // // // // //
 
+Route::get('/admin', [Login::class, 'index'])->name('admin.login');
+Route::post('/admin/login', [Login::class, 'LoginCheck'])->name('admin.login.check');
+Route::get('/admin/dashboard', [Index::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/logout', [Login::class, 'index'])->name('admin.logout');
+
+
 Route::prefix('admin')->group(function () {
     // Login Routes
-    Route::controller(Login::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/login', 'LoginCheck');
-        Route::get('/logout', 'logout');
-    });
+    // Route::controller(Login::class)->group(function () {
+    //     Route::get('/', 'index');
+    //     Route::post('/login', 'LoginCheck');
+    //     Route::get('/logout', 'logout');
+    // });
 
     // Dashboard Route
     Route::get('/dashboard', [Index::class, 'index']);
