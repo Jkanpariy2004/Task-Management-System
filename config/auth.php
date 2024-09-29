@@ -42,7 +42,7 @@ return [
         ],
         'admin' => [
             'driver' => 'session',
-            'provider' => 'admins', // This should point to the correct admin provider
+            'provider' => 'admins',
         ],
     ],
 
@@ -71,7 +71,7 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\admin::class, // Make sure this model exists
+            'model' => App\Models\admin::class,
         ],
     ],
 
