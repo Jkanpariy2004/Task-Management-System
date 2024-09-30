@@ -14,7 +14,7 @@ use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
 use Illuminate\Support\Facades\Auth;
 
-class Task extends Controller
+class TaskController extends Controller
 {
     public function index(){
         $comments = DB::table('comments')->orderBy('created_at', 'asc')->get();

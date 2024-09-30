@@ -4,13 +4,11 @@ namespace App\Http\Controllers\UserDashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment As dbcomment;
-use App\Models\Users As dbusers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
-class Comment extends Controller
+class CommentController extends Controller
 {
     public function store(Request $request)
     {
@@ -39,5 +37,4 @@ class Comment extends Controller
 
         return response()->json($response);
     }
-
 }

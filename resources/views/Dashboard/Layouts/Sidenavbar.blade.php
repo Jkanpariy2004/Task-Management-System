@@ -2,8 +2,7 @@
     <div class="app-brand demo">
         <a href="/dashboard" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <svg width="32" height="22" viewBox="0 0 32 22" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
                         fill="#7367F0" />
@@ -45,7 +44,8 @@
             </a>
         </li>
 
-        <li class="menu-item {{ Request::is('admin/company', 'admin/company/add', 'admin/company/edit/*') ? 'active' : '' }}">
+        <li
+            class="menu-item {{ Request::is('admin/company', 'admin/company/add', 'admin/company/edit/*') ? 'active' : '' }}">
             <a href="{{ route('company') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-building"></i>
                 <div data-i18n="Company">Company</div>
@@ -61,6 +61,18 @@
             <a href="{{ route('cache') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Cache">Cache</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::is('admin/role','admin/role/add','admin/role/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('admin.role') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-settings"></i>
+                <div data-i18n="Roles">Roles</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::is('admin/permission','admin/permission/add') ? 'active' : '' }}">
+            <a href="{{ route('admin.permission') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-settings"></i>
+                <div data-i18n="Permission">Permission</div>
             </a>
         </li>
     </ul>

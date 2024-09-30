@@ -6,17 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task as dbtask;
 use App\Models\Assign_Task as dbassign_task;
-use App\Models\Users as dbuser;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class Home extends Controller
+class HomeController extends Controller
 {
     public function index()
     {
         $AuthUser = Auth::guard('user')->user();
-        $userEmail = $AuthUser->email; // Assuming the email field exists
+        $userEmail = $AuthUser->email;
 
         $userData = DB::table('user')
             ->where('email', $userEmail)

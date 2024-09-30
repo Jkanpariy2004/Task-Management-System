@@ -111,3 +111,53 @@ Date:26/09/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:27/09/2024
+1.Tasks Completed:
+ ->OTP Login Using Twilio.(OTP Send In mobile on text Message)
+ ->payment Gateway integrate.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:28/09/2024
+1.Tasks Completed:
+ ->Wallet Create using Rezorpay Payment Gateway.
+
+2.Ongoing Tasks:
+ ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:30/09/2024
+1.Tasks Completed:
+ ->middleware login check.
+ ->login using auth.
+ ->css change in all file.
+ ->script add end of the code in all file.
+ ->blade file re order.
+ ->custome middleware.
+ ->datatable call in ajax.
+ ->route grouping & prefix.
+ ->relationship in model.
+    ->all chnages in Task Management System.
+
+2.Ongoing Tasks:
+ ->constsnt file declare.
+ ->role permission.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->

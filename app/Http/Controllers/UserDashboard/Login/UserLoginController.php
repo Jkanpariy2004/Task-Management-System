@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard\Login;
+namespace App\Http\Controllers\UserDashboard\Login;
 
 use App\Http\Controllers\Controller;
-use App\Models\admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
-class Login extends Controller
+class UserLoginController extends Controller
 {
-    public function showLoginForm()
+    public function index()
     {
-        return view('Dashboard.Login.Login');
+        return view('UserDashboard.Login.Login');
     }
 
-    public function login(Request $request)
+    public function Userlogin(Request $request)
     {
         $message = [
             'email.required' => 'Please Enter Valid Email Id.',
@@ -30,17 +28,17 @@ class Login extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('admin')->attempt($credentials)) {
+        if (Auth::guard('user')->attempt($credentials)) {
             return response()->json(['success' => 'Login Successful. Redirecting....'], 200);
         }
 
         return response()->json(['errors' => 'Please Enter Valid email or password.'], 400);
     }
 
-    public function logout()
+    public function UserLogout()
     {
-        Auth::guard('admin')->logout(); // Log the user out
+        Auth::guard('user')->logout();
 
-        return redirect('/admin')->with('success', 'Logout Successfully.');
+        return redirect('/user')->with('success', 'Logout Successfully.');
     }
 }

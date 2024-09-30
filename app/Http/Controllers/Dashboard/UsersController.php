@@ -9,12 +9,10 @@ use App\Models\Company as dbcompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-
-class Users extends Controller
+class UsersController extends Controller
 {
     public function index()
     {
@@ -24,7 +22,7 @@ class Users extends Controller
     public function AddUsers()
     {
         $companys = dbcompany::all();
-        return view('Dashboard.User.Add-Users', compact('companys'));
+        return view('Dashboard.User.Add-Users',compact('companys'));
     }
 
     public function FetchUsers()
@@ -125,8 +123,8 @@ class Users extends Controller
         $companys = dbcompany::all();
         $show = dbusers::all();
         $new = dbusers::find($id);
-        $url = url('/admin/users/update/' . $id);
-        $com = compact('show', 'new', 'url', 'companys');
+        $url = url('/users-update/' . $id);
+        $com = compact('show', 'new', 'url','companys');
         return view('Dashboard.User.User_edit', $com);
     }
 
@@ -169,7 +167,7 @@ class Users extends Controller
 
         $user->token = $token;
         $user->save();
-        $passwordCreationUrl = url('/admin/users/password-creation-form?token=' . $token);
+        $passwordCreationUrl = url('/password-creation-form?token='.$token);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
 
@@ -181,7 +179,7 @@ class Users extends Controller
         $user = $request->query('user');
         $token = $request->query('token');
 
-        return view('Dashboard.Emails.PasswordCreationForm', compact('user', 'token'));
+        return view('Dashboard.Emails.PasswordCreationForm', compact('user','token'));
     }
 
     public function store(Request $request)
@@ -194,6 +192,7 @@ class Users extends Controller
 
         $token = $request->input('token');
         $user = dbusers::where('token', $token)->first();
+        $user = dbusers::where('token', $token)->update(['password' => bcrypt($request->input('password')),'token' => null]);
 
         if (!$user) {
             return response()->json(['error' => 'Token is Expired. User not found.'], 404);

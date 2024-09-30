@@ -1,15 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\Login\Login;
-use App\Http\Controllers\Dashboard\Index;
-use App\Http\Controllers\Dashboard\Users;
-use App\Http\Controllers\Dashboard\Company;
-use App\Http\Controllers\Dashboard\Task;
-use App\Http\Controllers\CacheClear;
-use App\Http\Controllers\UserDashboard\Login\UserLogin;
-use App\Http\Controllers\UserDashboard\Home;
-use App\Http\Controllers\UserDashboard\Comment;
+use App\Http\Controllers\Dashboard\Login\LoginController;
+use App\Http\Controllers\Dashboard\IndexController;
+use App\Http\Controllers\Dashboard\UsersController;
+use App\Http\Controllers\Dashboard\CompanyController;
+use App\Http\Controllers\Dashboard\TaskController;
+use App\Http\Controllers\Dashboard\CacheClearController;
+use App\Http\Controllers\Dashboard\PermissionController;
+use App\Http\Controllers\Dashboard\RolesController;
+use App\Http\Controllers\UserDashboard\Login\UserLoginController;
+use App\Http\Controllers\UserDashboard\HomeController;
+use App\Http\Controllers\UserDashboard\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,7 @@ use App\Http\Controllers\UserDashboard\Comment;
 
 Route::prefix('user')->group(function () {
 
-    Route::controller(UserLogin::class)->group(function () {
+    Route::controller(UserLoginController::class)->group(function () {
         Route::get('/', 'index')->name('user.login');
         Route::post('/login', 'Userlogin')->name('user.login.check');
         Route::get('/logout', 'UserLogout')->name('user.logout');
@@ -31,12 +33,12 @@ Route::prefix('user')->group(function () {
 
     Route::middleware('auth.user')->group(function () {
 
-        Route::controller(Home::class)->group(function () {
+        Route::controller(HomeController::class)->group(function () {
             Route::get('/dashboard', 'index');
             Route::get('/Fetch-User-Task', 'FetchUserTask');
         });
 
-        Route::post('/comments-store', [Comment::class, 'store'])->name('comments.store');
+        Route::post('/comments-store', [CommentController::class, 'store'])->name('comments.store');
     });
 });
 
@@ -44,19 +46,19 @@ Route::prefix('user')->group(function () {
 // Admin Panel Route //
 // // // // // // // //
 Route::prefix('admin')->group(function () {
-    Route::controller(Login::class)->group(function () {
+    Route::controller(LoginController::class)->group(function () {
         Route::get('/', 'showLoginForm')->name('admin.login');
         Route::post('/login', 'login')->name('admin.login.check');
         Route::get('/logout', 'logout')->name('admin.logout');
     });
 
-    Route::get('users/password-creation-form', [Users::class, 'showPasswordCreationForm'])->name('password.creation.form');
-    Route::post('users/password-creation', [Users::class, 'store']);
+    Route::get('users/password-creation-form', [UsersController::class, 'showPasswordCreationForm'])->name('password.creation.form');
+    Route::post('users/password-creation', [UsersController::class, 'store']);
 
     Route::middleware('auth.admin')->group(function () {
-        Route::get('/dashboard', [Index::class, 'index']);
+        Route::get('/dashboard', [IndexController::class, 'index']);
 
-        Route::prefix('users')->controller(Users::class)->group(function () {
+        Route::prefix('users')->controller(UsersController::class)->group(function () {
             Route::get('/', 'index')->name('users');
             Route::get('/add', 'AddUsers');
             Route::post('/submit', 'SubmitUser');
@@ -70,7 +72,29 @@ Route::prefix('admin')->group(function () {
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.user');
         });
 
-        Route::prefix('cache')->controller(CacheClear::class)->group(function () {
+        Route::post('/role/assign-permission', [RolesController::class, 'assignPermission'])->name('role.assign.permission');
+        Route::post('/role/revoke-permission', [RolesController::class, 'revokePermission'])->name('role.revoke.permission');
+
+
+        Route::prefix('role')->controller(RolesController::class)->group(function () {
+            Route::get('/', 'index')->name('admin.role');
+            Route::get('/fetch-role', 'fetch')->name('role.fetch');
+            Route::get('/add', 'add')->name('add.role');
+            Route::post('/insert', 'insert')->name('insert.role');
+            Route::get('/edit/{id}', 'edit')->name('edit.role');
+            Route::post('/update/{id}', 'update')->name('update.role');
+            Route::get('/delete/{id}', 'delete')->name('delete.role');
+        });
+
+        Route::prefix('permission')->controller(PermissionController::class)->group(function () {
+            Route::get('/', 'index')->name('admin.permission');
+            Route::get('/fetch-permission', 'fetch')->name('fetch.permission');
+            Route::get('/add', 'add')->name('add.permission');
+            Route::post('/submit', 'insert')->name('submit.permission');
+            Route::get('/delete/{id}', 'delete')->name('permission.delete');
+        });
+
+        Route::prefix('cache')->controller(CacheClearController::class)->group(function () {
             Route::get('/', 'index')->name('cache');
             Route::get('/cache-clear', 'clearCache')->name('cache.clear');
             Route::get('/route-cache-clear', 'clearRouteCache')->name('route.cache.clear');
@@ -80,7 +104,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/optimize-cache-clear', 'optimizeCache')->name('optimize.cache.clear');
         });
 
-        Route::prefix('company')->controller(Company::class)->group(function () {
+        Route::prefix('company')->controller(CompanyController::class)->group(function () {
             Route::get('/', 'index')->name('company');
             Route::get('/fetch-company', 'FetchCompany');
             Route::get('/add', 'AddCompany');
@@ -91,7 +115,7 @@ Route::prefix('admin')->group(function () {
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.company');
         });
 
-        Route::prefix('task')->controller(Task::class)->group(function () {
+        Route::prefix('task')->controller(TaskController::class)->group(function () {
             Route::get('/', 'index')->name('task');
             Route::get('/fetch-task', 'FetchTask')->name('fetch.task');
             Route::get('/add', 'AddTask')->name('add.task');
@@ -104,3 +128,5 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+Route::post('/assign-permission',[RolesController::class,'permissionAssign']);

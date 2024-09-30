@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Artisan;
 
-class CacheClear extends Controller
+class CacheClearController extends Controller
 {
     public function index(){
         return view('Dashboard.Cache.cache');

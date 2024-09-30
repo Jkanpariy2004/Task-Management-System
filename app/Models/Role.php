@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Assign_Task extends Model
+class Role extends Model
 {
     use HasFactory;
-    protected $table = 'assigned_task';
-
-    protected $filleble  = [
-        'task_id',
-        'user_id'
+    protected $table = 'role';
+    protected $fillable =[
+        'role_name'
     ];
 }
