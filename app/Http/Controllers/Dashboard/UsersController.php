@@ -167,7 +167,7 @@ class UsersController extends Controller
 
         $user->token = $token;
         $user->save();
-        $passwordCreationUrl = url('/password-creation-form?token='.$token);
+        $passwordCreationUrl = url('admin/users/password-creation-form?token='.$token);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
 
@@ -192,7 +192,7 @@ class UsersController extends Controller
 
         $token = $request->input('token');
         $user = dbusers::where('token', $token)->first();
-        $user = dbusers::where('token', $token)->update(['password' => bcrypt($request->input('password')),'token' => null]);
+        // $user = dbusers::where('token', $token)->update(['password' => bcrypt($request->input('password')),'token' => null]);
 
         if (!$user) {
             return response()->json(['error' => 'Token is Expired. User not found.'], 404);

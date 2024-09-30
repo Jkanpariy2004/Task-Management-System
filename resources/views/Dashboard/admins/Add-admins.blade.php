@@ -13,24 +13,39 @@
 
             @include('Dashboard.Layouts.header')
 
-
             <div class="content-wrapper">
 
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <div class="col-md-12">
                         <div class="card mb-4">
-                            <h5 class="card-header">Update Role</h5>
+                            <h5 class="card-header">Create Admin</h5>
                             <div class="card-body">
                                 <form id="RoleForm">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="role_name" class="form-label">Role Name</label>
-                                        <input type="text" class="form-control" name="role_name" id="role_name" value="{{ $new->role_name }}" placeholder="Enter User Name" />
-                                        <div class="invalid-feedback" id="role_name-error"></div>
+                                        <label for="admin_name" class="form-label">Admin Name</label>
+                                        <input type="text" class="form-control" name="admin_name" id="admin_name" placeholder="Enter Admin Name" />
+                                        <div class="invalid-feedback" id="admin_name-error"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_email" class="form-label">Admin Email</label>
+                                        <input type="email" class="form-control" name="admin_email" id="admin_email" placeholder="Enter Admin Email" />
+                                        <div class="invalid-feedback" id="admin_email-error"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_role" class="form-label">Company</label>
+                                        <select class="form-select" id="admin_role" name="admin_role">
+                                        <option value="" hidden>Select Admin Role</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">
+                                                    {{ $role->role_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary w-100">Update Role</button>
+                                        <button type="submit" class="btn btn-primary w-100">Create Admin</button>
                                     </div>
                                 </form>
                             </div>
@@ -64,10 +79,24 @@
 
             var isValid = true;
 
-            var role_name = $('#role_name').val();
-            if (role_name.trim() === '') {
-                $('#role_name').addClass('is-invalid');
-                $('#role_name-error').text('Role Name is required');
+            var admin_name = $('#admin_name').val();
+            if (admin_name.trim() === '') {
+                $('#admin_name').addClass('is-invalid');
+                $('#admin_name-error').text('Name is required');
+                isValid = false;
+            }
+
+            var admin_email = $('#admin_email').val();
+            if (admin_email.trim() === '') {
+                $('#admin_email').addClass('is-invalid');
+                $('#admin_email-error').text('Email is required');
+                isValid = false;
+            }
+
+            var admin_role = $('#admin_role').val();
+            if (admin_role.trim() === '') {
+                $('#admin_role').addClass('is-invalid');
+                $('#admin_role-error').text('Role is required');
                 isValid = false;
             }
 
@@ -75,7 +104,7 @@
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: '{{ route("update.admins", $new->id) }}',
+                    url: '{{ route("insert.admins") }}',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -89,7 +118,7 @@
                             timerProgressBar: true,
                             confirmButtonText: 'OK'
                         }).then(function() {
-                            window.location.href = '/admin/role';
+                            window.location.href = '/admin/admins';
                         });
                     },
                     error: function(xhr) {

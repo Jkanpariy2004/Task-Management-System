@@ -40,7 +40,6 @@ class RolesController extends Controller
         return view('Dashboard.Roles.Role', compact('permissions', 'userPermissions'));
     }
 
-
     public function fetch() {
         $roles = Role::all();
 
@@ -77,9 +76,10 @@ class RolesController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        Role::create([
-            'role_name' => $request->role_name
-        ]);
+        $role = new Role();
+        $role->role_name = $request->role_name;
+
+        $role->save();
 
         return response()->json(['message' => 'Role created successfully!'], 200);
     }

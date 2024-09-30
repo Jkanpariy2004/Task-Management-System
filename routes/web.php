@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\Login\LoginController;
 use App\Http\Controllers\Dashboard\IndexController;
@@ -46,17 +47,32 @@ Route::prefix('user')->group(function () {
 // Admin Panel Route //
 // // // // // // // //
 Route::prefix('admin')->group(function () {
+
+    Route::get('admins/password-creation-form', [AdminController::class, 'showPasswordCreationForm'])->name('password.creation.form.admin');
+    Route::post('admins/password-creation', [AdminController::class, 'store']);
+
+    Route::prefix('admins')->controller(AdminController::class)->group(function () {
+        Route::get('/', 'index')->name('admin.admins');
+        Route::get('/fetch-admin', 'fetch')->name('fetch.admins');
+        Route::get('/add', 'add')->name('add.admin');
+        Route::post('/insert', 'insert')->name('insert.admins');
+        Route::get('/edit/{id}', 'edit')->name('edit.admins');
+        Route::post('/update/{id}', 'update')->name('update.admins');
+        Route::get('/delete/{id}', 'delete')->name('delete.admins');
+        Route::post('/send-invitation', 'sendInvitation');
+    });
+    
     Route::controller(LoginController::class)->group(function () {
         Route::get('/', 'showLoginForm')->name('admin.login');
         Route::post('/login', 'login')->name('admin.login.check');
         Route::get('/logout', 'logout')->name('admin.logout');
     });
 
-    Route::get('users/password-creation-form', [UsersController::class, 'showPasswordCreationForm'])->name('password.creation.form');
-    Route::post('users/password-creation', [UsersController::class, 'store']);
-
     Route::middleware('auth.admin')->group(function () {
         Route::get('/dashboard', [IndexController::class, 'index']);
+
+        Route::get('users/password-creation-form', [UsersController::class, 'showPasswordCreationForm'])->name('password.creation.form');
+        Route::post('users/password-creation', [UsersController::class, 'store']);
 
         Route::prefix('users')->controller(UsersController::class)->group(function () {
             Route::get('/', 'index')->name('users');
@@ -129,4 +145,4 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-Route::post('/assign-permission',[RolesController::class,'permissionAssign']);
+Route::post('/assign-permission', [RolesController::class, 'permissionAssign']);
