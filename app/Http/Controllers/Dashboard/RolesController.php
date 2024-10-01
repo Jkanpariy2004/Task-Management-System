@@ -16,24 +16,26 @@ class RolesController extends Controller
         $permissions = Permission::orderBy('id')->get();
         $roleId = Role::all();
 
-        $rolePermissions = user_permission::where('role_id', 1)->get()->keyBy('permission_id');
+        foreach($roleId as $id){
+            $rolePermissions = user_permission::where('role_id', $id->id)->get()->keyBy('permission_id');
 
-        $userPermissions = [];
-        foreach ($permissions as $permission) {
-            if ($rolePermissions->has($permission->id)) {
-                $userPermissions[$permission->id] = [
-                    'list' => $rolePermissions[$permission->id]->list,
-                    'create' => $rolePermissions[$permission->id]->create,
-                    'update' => $rolePermissions[$permission->id]->update,
-                    'delete' => $rolePermissions[$permission->id]->delete,
-                ];
-            } else {
-                $userPermissions[$permission->id] = [
-                    'list' => false,
-                    'create' => false,
-                    'update' => false,
-                    'delete' => false,
-                ];
+            $userPermissions = [];
+            foreach ($permissions as $permission) {
+                if ($rolePermissions->has($permission->id)) {
+                    $userPermissions[$permission->id] = [
+                        'list' => $rolePermissions[$permission->id]->list,
+                        'create' => $rolePermissions[$permission->id]->create,
+                        'update' => $rolePermissions[$permission->id]->update,
+                        'delete' => $rolePermissions[$permission->id]->delete,
+                    ];
+                } else {
+                    $userPermissions[$permission->id] = [
+                        'list' => false,
+                        'create' => false,
+                        'update' => false,
+                        'delete' => false,
+                    ];
+                }
             }
         }
 
@@ -76,10 +78,9 @@ class RolesController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $role = new Role();
-        $role->role_name = $request->role_name;
-
-        $role->save();
+        Role::create([
+            'role_name' => $request->role_name
+        ]);
 
         return response()->json(['message' => 'Role created successfully!'], 200);
     }

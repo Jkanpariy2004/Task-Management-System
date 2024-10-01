@@ -27,7 +27,6 @@ class UsersController extends Controller
 
     public function FetchUsers()
     {
-        // $users = dbusers::all();
         $users = DB::table('user')
             ->leftJoin('company', 'user.company', '=', 'company.id')
             ->select('user.*', 'company.c_name')
@@ -167,7 +166,7 @@ class UsersController extends Controller
 
         $user->token = $token;
         $user->save();
-        $passwordCreationUrl = url('admin/users/password-creation-form?token='.$token);
+        $passwordCreationUrl = url('/password-creation-form?token='.$token);
 
         Mail::to($request->email)->send(new InvitationMail($recipientEmail, $passwordCreationUrl));
 
@@ -192,7 +191,7 @@ class UsersController extends Controller
 
         $token = $request->input('token');
         $user = dbusers::where('token', $token)->first();
-        // $user = dbusers::where('token', $token)->update(['password' => bcrypt($request->input('password')),'token' => null]);
+        $user = dbusers::where('token', $token)->update(['password' => bcrypt($request->input('password')),'token' => null]);
 
         if (!$user) {
             return response()->json(['error' => 'Token is Expired. User not found.'], 404);

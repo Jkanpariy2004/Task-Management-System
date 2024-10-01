@@ -46,6 +46,7 @@ Route::prefix('user')->group(function () {
 // // // // // // // //
 // Admin Panel Route //
 // // // // // // // //
+
 Route::prefix('admin')->group(function () {
 
     Route::get('admins/password-creation-form', [AdminController::class, 'showPasswordCreationForm'])->name('password.creation.form.admin');
@@ -61,53 +62,47 @@ Route::prefix('admin')->group(function () {
         Route::get('/delete/{id}', 'delete')->name('delete.admins');
         Route::post('/send-invitation', 'sendInvitation');
     });
-    
+
     Route::controller(LoginController::class)->group(function () {
         Route::get('/', 'showLoginForm')->name('admin.login');
         Route::post('/login', 'login')->name('admin.login.check');
         Route::get('/logout', 'logout')->name('admin.logout');
     });
 
+    Route::get('users/password-creation-form', [UsersController::class, 'showPasswordCreationForm'])->name('password.creation.form');
+    Route::post('users/password-creation', [UsersController::class, 'store']);
+
+    Route::get('/dashboard', [IndexController::class, 'index'])->name('admin.dashboard');
+
     Route::middleware('auth.admin')->group(function () {
-        Route::get('/dashboard', [IndexController::class, 'index']);
-
-        Route::get('users/password-creation-form', [UsersController::class, 'showPasswordCreationForm'])->name('password.creation.form');
-        Route::post('users/password-creation', [UsersController::class, 'store']);
-
         Route::prefix('users')->controller(UsersController::class)->group(function () {
-            Route::get('/', 'index')->name('users');
-            Route::get('/add', 'AddUsers');
+            Route::get('/', 'index')->name('users')->middleware('manage.permission');
+            Route::get('/add', 'AddUsers')->middleware('manage.permission');
             Route::post('/submit', 'SubmitUser');
             Route::get('/fetch-users', 'FetchUsers');
-            Route::get('/delete/{id}', 'UsersDelete')->name('users.delete');
-            Route::get('/edit/{id}', 'edit');
+            Route::get('/delete/{id}', 'UsersDelete')->name('users.delete')->middleware('manage.permission');
+            Route::get('/edit/{id}', 'edit')->middleware('manage.permission');
             Route::post('/update/{id}', 'UserUpdate')->name('users.update');
             Route::post('/send-invitation', 'sendInvitation');
-            // Route::get('/password-creation-form', 'showPasswordCreationForm')->name('password.creation.form');
-            // Route::post('/password-creation', 'store');
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.user');
         });
-
-        Route::post('/role/assign-permission', [RolesController::class, 'assignPermission'])->name('role.assign.permission');
-        Route::post('/role/revoke-permission', [RolesController::class, 'revokePermission'])->name('role.revoke.permission');
-
 
         Route::prefix('role')->controller(RolesController::class)->group(function () {
             Route::get('/', 'index')->name('admin.role');
             Route::get('/fetch-role', 'fetch')->name('role.fetch');
-            Route::get('/add', 'add')->name('add.role');
+            Route::get('/add', 'add')->name('add.role')->middleware('manage.permission');
             Route::post('/insert', 'insert')->name('insert.role');
-            Route::get('/edit/{id}', 'edit')->name('edit.role');
+            Route::get('/edit/{id}', 'edit')->name('edit.role')->middleware('manage.permission');
             Route::post('/update/{id}', 'update')->name('update.role');
-            Route::get('/delete/{id}', 'delete')->name('delete.role');
+            Route::get('/delete/{id}', 'delete')->name('delete.role')->middleware('manage.permission');
         });
 
         Route::prefix('permission')->controller(PermissionController::class)->group(function () {
             Route::get('/', 'index')->name('admin.permission');
             Route::get('/fetch-permission', 'fetch')->name('fetch.permission');
-            Route::get('/add', 'add')->name('add.permission');
+            Route::get('/add', 'add')->name('add.permission')->middleware('manage.permission');
             Route::post('/submit', 'insert')->name('submit.permission');
-            Route::get('/delete/{id}', 'delete')->name('permission.delete');
+            Route::get('/delete/{id}', 'delete')->name('permission.delete')->middleware('manage.permission');
         });
 
         Route::prefix('cache')->controller(CacheClearController::class)->group(function () {
@@ -121,24 +116,24 @@ Route::prefix('admin')->group(function () {
         });
 
         Route::prefix('company')->controller(CompanyController::class)->group(function () {
-            Route::get('/', 'index')->name('company');
+            Route::get('/', 'index')->name('company')->middleware('manage.permission');
             Route::get('/fetch-company', 'FetchCompany');
-            Route::get('/add', 'AddCompany');
+            Route::get('/add', 'AddCompany')->name('add')->middleware('manage.permission');
             Route::post('/submit', 'SubmitCompany')->name('submit.company');
-            Route::get('/edit/{id}', 'edit');
+            Route::get('/edit/{id}', 'edit')->middleware('manage.permission')->middleware('manage.permission');
             Route::post('/update/{id}', 'CompanyUpdate')->name('company.update');
-            Route::get('/delete/{id}', 'CompanyDelete')->name('company.delete');
+            Route::get('/delete/{id}', 'CompanyDelete')->name('company.delete')->middleware('manage.permission');
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.company');
         });
 
         Route::prefix('task')->controller(TaskController::class)->group(function () {
             Route::get('/', 'index')->name('task');
             Route::get('/fetch-task', 'FetchTask')->name('fetch.task');
-            Route::get('/add', 'AddTask')->name('add.task');
+            Route::get('/add', 'AddTask')->name('add.task')->middleware('manage.permission');
             Route::post('/submit', 'SubmitTask')->name('submit.task');
-            Route::get('/delete/{id}', 'TaskDelete')->name('task.delete');
+            Route::get('/delete/{id}', 'TaskDelete')->name('task.delete')->middleware('manage.permission');
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.task');
-            Route::get('/edit/{id}', 'edit');
+            Route::get('/edit/{id}', 'edit')->middleware('manage.permission')->middleware('manage.permission');
             Route::post('/update/{id}', 'TaskUpdate')->name('task.update');
             Route::post('/store-comments', 'store_comment')->name('store.comments');
         });

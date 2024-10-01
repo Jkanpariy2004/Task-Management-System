@@ -124,7 +124,6 @@
                                 confirmButtonText: 'OK'
                             });
                             @endif
-
                         });
                         </script>
                         <div class="mb-3">

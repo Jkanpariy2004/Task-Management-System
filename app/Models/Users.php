@@ -31,4 +31,12 @@ class Users extends Authenticatable
     {
         return $this->password;
     }
+
+    public function hasPermission($permission)
+    {
+        $rolePermissions = $this->role->permissions;
+
+        return $rolePermissions->contains('name', $permission);
+    }
+
 }

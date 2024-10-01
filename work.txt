@@ -161,3 +161,16 @@ Date:30/09/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:01/10/2024
+1.Tasks Completed:
+ ->Admin Role Permission in Task Management System.
+
+2.Ongoing Tasks:
+  ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Apply Role Permission to Admin.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
