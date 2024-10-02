@@ -37,27 +37,27 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Apps &amp; Pages</span>
         </li>
-        <li class="menu-item {{ Request::is('admin/users', 'admin/users/add', 'admin/users/edit/*') ? 'active' : '' }}">
-            <a href="{{ route('users') }}" class="menu-link">
+        <li class="menu-item {{ Request::is('admin/users/list', 'admin/users/add', 'admin/users/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('list.users') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div data-i18n="users">users</div>
             </a>
         </li>
 
         <li
-            class="menu-item {{ Request::is('admin/company', 'admin/company/add', 'admin/company/edit/*') ? 'active' : '' }}">
-            <a href="{{ route('company') }}" class="menu-link">
+            class="menu-item {{ Request::is('admin/company/list', 'admin/company/add', 'admin/company/edit/*') ? 'active' : '' }}">
+            <a href="{{ route('list.company') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-building"></i>
                 <div data-i18n="Company">Company</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('admin/task', 'admin/task/add', 'admin/task/edit/*') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('admin/task/list', 'admin/task/add', 'admin/task/edit/*') ? 'active' : '' }}">
             <a href="{{ route('task') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                 <div data-i18n="Task">Task</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('admin/cache') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('admin/cache/list') ? 'active' : '' }}">
             <a href="{{ route('cache') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Cache">Cache</div>
@@ -69,13 +69,13 @@
                 <div data-i18n="Other Admin">Other Admin</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('admin/role', 'admin/role/add', 'admin/role/edit/*') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('admin/role/list', 'admin/role/add', 'admin/role/edit/*') ? 'active' : '' }}">
             <a href="{{ route('admin.role') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Roles">Roles</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('admin/permission', 'admin/permission/add') ? 'active' : '' }}">
+        <li class="menu-item {{ Request::is('admin/permission/list', 'admin/permission/add') ? 'active' : '' }}">
             <a href="{{ route('admin.permission') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Permission">Permission</div>

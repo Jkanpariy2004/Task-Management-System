@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Dashboard;
 
+use App\Models\Permission;
 use App\Models\user_permission;
 use Closure;
 use Illuminate\Http\Request;
@@ -14,36 +15,41 @@ class ManagePermission
         $user = Auth::guard('admin')->user();
 
         if (!$user) {
-            return redirect()->back()->with('error', 'Unauthorized Access');
+            return redirect()->back()->with('error', 'User Not Found');
         }
 
         $roleId = $user->role;
-        $action = $request->route()->getName();
-
-        if (!$action) {
-            return redirect()->back()->with('error', 'Route name not found');
-        }
-
-        dd('Action Name: ' . $action);
+        $url = $request->route()->getName();
 
         $permission = user_permission::where('role_id', $roleId)
-            ->whereHas('permission', function ($query) use ($action) {
-                $query->where('permission_name', $action);
-            })
-            ->first();
+            ->whereHas('permission', function ($query) use ($url) {
+                $query->where('permission_name', $url); 
+            })->first();
 
+        // Check if permission exists
         if (!$permission) {
             return redirect()->back()->with('error', 'Unauthorized Access');
         }
 
-        if (($permission->list === false && ($action !== 'add' && $action !== 'update' && $action !== 'delete')) ||
-            ($action === 'add' && !$permission->create) ||
-            ($action === 'update' && !$permission->update) ||
-            ($action === 'delete' && !$permission->delete)) {
+        $canAccess = false;
+
+        // Check for list permission
+        if ($permission->list == 1) {
+            $canAccess = true; 
+        }
+
+        if ($url == $url) {
+            $canAccess = $canAccess || ($permission->create == 1);
+        } elseif ($url == 'edit') {
+            $canAccess = $canAccess || ($permission->update == 1);
+        } elseif ($url == 'delete') {
+            $canAccess = $canAccess || ($permission->delete == 1);
+        }
+
+        if (!$canAccess) {
             return redirect()->back()->with('error', 'Unauthorized Permission');
         }
 
         return $next($request);
     }
-
 }

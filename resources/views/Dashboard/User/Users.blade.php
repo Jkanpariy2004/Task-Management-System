@@ -26,7 +26,7 @@
                                         <h3>User Data</h3>
                                     </div>
                                     <div class="w-50 text-end">
-                                        <a href="users/add" class="btn btn-primary">
+                                        <a href="add" class="btn btn-primary">
                                             <i class="ti ti-plus me-sm-1"></i>Add User
                                         </a>
 

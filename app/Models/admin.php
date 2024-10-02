@@ -16,4 +16,14 @@ class admin extends Authenticatable
     public function getAuthPassword() {
         return $this->password;
     }
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions()->pluck('name')->contains($permission);
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permission', 'id', 'permission_id')->select('user_permission.id');
+    }
 }

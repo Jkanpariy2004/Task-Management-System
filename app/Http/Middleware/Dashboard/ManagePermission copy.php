@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Dashboard;
 
+use App\Models\Permission;
 use App\Models\user_permission;
 use Closure;
 use Illuminate\Http\Request;
@@ -18,26 +19,34 @@ class ManagePermission
         }
 
         $roleId = $user->role;
-        $action = $request->route()->getName();
-
-        if (!$action) {
-            return redirect()->back()->with('error', 'Route name not found');
-        }
+        $url = $request->route()->getName();
+        // dd($url);
+        // $url = basename($url);
 
         $permission = user_permission::where('role_id', $roleId)
-            ->whereHas('permission', function ($query) use ($action) {
-                $query->where('permission_name', $action);
-            })
-            ->first();
-
+            ->whereHas('permission', function ($query) use ($url) {
+                $query->where('permission_name', $url); 
+            })->first();
+        
         if (!$permission) {
             return redirect()->back()->with('error', 'Unauthorized Access');
         }
 
-        if (($permission->list === false && ($action !== 'add' && $action !== 'update' && $action !== 'delete')) ||
-            ($action === 'add' && !$permission->create) ||
-            ($action === 'update' && !$permission->update) ||
-            ($action === 'delete' && !$permission->delete)) {
+        $canAccess = false;
+
+        if ($url == $url) {
+            $canAccess = $permission->list == 1;
+        } elseif ($url == 'add') {
+            $canAccess = $permission->create == 1;
+        } elseif ($url == 'edit') {
+            $canAccess = $permission->update == 1;
+        } elseif ($url == 'delete') {
+            $canAccess = $permission->delete == 1;
+        } else {
+            return redirect()->back()->with('error', 'Invalid Permission Request');
+        }
+
+        if (!$canAccess) {
             return redirect()->back()->with('error', 'Unauthorized Permission');
         }
 

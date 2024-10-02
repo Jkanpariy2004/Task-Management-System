@@ -76,8 +76,8 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth.admin')->group(function () {
         Route::prefix('users')->controller(UsersController::class)->group(function () {
-            Route::get('/', 'index')->name('users')->middleware('manage.permission');
-            Route::get('/add', 'AddUsers')->middleware('manage.permission');
+            Route::get('/list', 'index')->name('list.users')->middleware('manage.permission');
+            Route::get('/add', 'AddUsers')->name('add')->middleware('manage.permission');
             Route::post('/submit', 'SubmitUser');
             Route::get('/fetch-users', 'FetchUsers');
             Route::get('/delete/{id}', 'UsersDelete')->name('users.delete')->middleware('manage.permission');
@@ -87,8 +87,19 @@ Route::prefix('admin')->group(function () {
             Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.user');
         });
 
+        Route::prefix('company')->controller(CompanyController::class)->group(function () {
+            Route::get('/list', 'index')->name('list.company')->middleware('manage.permission');
+            Route::get('/fetch-company', 'FetchCompany');
+            Route::get('/add', 'AddCompany')->name('add.company')->middleware('manage.permission');
+            Route::post('/submit', 'SubmitCompany')->name('submit.company');
+            Route::get('/edit/{id}', 'edit')->name('edit.company')->middleware('manage.permission');
+            Route::post('/update/{id}', 'CompanyUpdate')->name('company.update');
+            Route::get('/delete/{id}', 'CompanyDelete')->name('company.delete')->middleware('manage.permission');
+            Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.company');
+        });
+
         Route::prefix('role')->controller(RolesController::class)->group(function () {
-            Route::get('/', 'index')->name('admin.role');
+            Route::get('/list', 'index')->name('admin.role');
             Route::get('/fetch-role', 'fetch')->name('role.fetch');
             Route::get('/add', 'add')->name('add.role')->middleware('manage.permission');
             Route::post('/insert', 'insert')->name('insert.role');
@@ -98,7 +109,7 @@ Route::prefix('admin')->group(function () {
         });
 
         Route::prefix('permission')->controller(PermissionController::class)->group(function () {
-            Route::get('/', 'index')->name('admin.permission');
+            Route::get('/list', 'index')->name('admin.permission');
             Route::get('/fetch-permission', 'fetch')->name('fetch.permission');
             Route::get('/add', 'add')->name('add.permission')->middleware('manage.permission');
             Route::post('/submit', 'insert')->name('submit.permission');
@@ -106,7 +117,7 @@ Route::prefix('admin')->group(function () {
         });
 
         Route::prefix('cache')->controller(CacheClearController::class)->group(function () {
-            Route::get('/', 'index')->name('cache');
+            Route::get('/list', 'index')->name('cache');
             Route::get('/cache-clear', 'clearCache')->name('cache.clear');
             Route::get('/route-cache-clear', 'clearRouteCache')->name('route.cache.clear');
             Route::get('/config-cache-clear', 'clearConfigCache')->name('config.cache.clear');
@@ -115,19 +126,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/optimize-cache-clear', 'optimizeCache')->name('optimize.cache.clear');
         });
 
-        Route::prefix('company')->controller(CompanyController::class)->group(function () {
-            Route::get('/', 'index')->name('company')->middleware('manage.permission');
-            Route::get('/fetch-company', 'FetchCompany');
-            Route::get('/add', 'AddCompany')->name('add')->middleware('manage.permission');
-            Route::post('/submit', 'SubmitCompany')->name('submit.company');
-            Route::get('/edit/{id}', 'edit')->middleware('manage.permission')->middleware('manage.permission');
-            Route::post('/update/{id}', 'CompanyUpdate')->name('company.update');
-            Route::get('/delete/{id}', 'CompanyDelete')->name('company.delete')->middleware('manage.permission');
-            Route::post('/bulk-delete', 'bulkDelete')->name('bulk.delete.company');
-        });
-
         Route::prefix('task')->controller(TaskController::class)->group(function () {
-            Route::get('/', 'index')->name('task');
+            Route::get('/list', 'index')->name('task');
             Route::get('/fetch-task', 'FetchTask')->name('fetch.task');
             Route::get('/add', 'AddTask')->name('add.task')->middleware('manage.permission');
             Route::post('/submit', 'SubmitTask')->name('submit.task');
