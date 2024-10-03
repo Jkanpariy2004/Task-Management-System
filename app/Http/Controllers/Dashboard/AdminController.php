@@ -7,6 +7,7 @@ use App\Models\admin;
 use App\Models\Role;
 use App\Mail\AdminInvitationMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;

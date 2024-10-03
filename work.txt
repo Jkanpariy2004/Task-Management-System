@@ -174,3 +174,32 @@ Date:01/10/2024
 
 4.Next Steps/Plan for Tomorrow:
  ->
+
+Date:02/10/2024
+1.Tasks Completed:
+ ->Admin Role Permission Solve Error in Task Management System.
+ ->Login using Brezee.
+
+2.Ongoing Tasks:
+  ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->Apply Role Permission to Admin.
+
+4.Next Steps/Plan for Tomorrow:
+ ->
+
+Date:03/10/2024
+1.Tasks Completed:
+ ->admin login method change to apply brezee package install and apply admin login.
+ ->data table error solve in Task Management System.
+ ->csv file import & export in database.
+
+2.Ongoing Tasks:
+  ->No Ongoing Task.
+
+3.Challenges Faced:
+ ->No challenge faced today.
+
+4.Next Steps/Plan for Tomorrow:
+ ->

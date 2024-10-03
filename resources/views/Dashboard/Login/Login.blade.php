@@ -156,7 +156,7 @@
                                 var formData = new FormData(this);
 
                                 $.ajax({
-                                    url: '/admin/login',
+                                    url: '{{ route('login') }}',
                                     type: 'POST',
                                     data: formData,
                                     processData: false,

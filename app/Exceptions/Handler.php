@@ -42,20 +42,6 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
-    {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
-    }
-
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Illuminate\Http\Response
-     */
     public function render($request, Throwable $exception)
     {
         // Check for 404 errors

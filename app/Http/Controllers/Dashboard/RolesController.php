@@ -15,11 +15,11 @@ class RolesController extends Controller
     {
         $permissions = Permission::orderBy('id')->get();
         $roleId = Role::all();
+        $userPermissions = [];
 
-        foreach($roleId as $id){
+        foreach($roleId as $id) {
             $rolePermissions = user_permission::where('role_id', $id->id)->get()->keyBy('permission_id');
 
-            $userPermissions = [];
             foreach ($permissions as $permission) {
                 if ($rolePermissions->has($permission->id)) {
                     $userPermissions[$permission->id] = [

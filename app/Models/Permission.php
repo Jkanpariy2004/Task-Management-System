@@ -15,6 +15,6 @@ class Permission extends Model
         'permission_name',
         'slug'
     ];
-    
+
 }
 

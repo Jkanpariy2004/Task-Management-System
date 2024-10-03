@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware\Dashboard;
 
-use App\Models\Permission;
 use App\Models\user_permission;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,9 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ManagePermission
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
     public function handle(Request $request, Closure $next)
     {
-        $user = Auth::guard('admin')->user();
+        $user = Auth::guard('web')->user();
 
         if (!$user) {
             return redirect()->back()->with('error', 'User Not Found');
@@ -23,7 +29,7 @@ class ManagePermission
 
         $permission = user_permission::where('role_id', $roleId)
             ->whereHas('permission', function ($query) use ($url) {
-                $query->where('permission_name', $url); 
+                $query->where('permission_name', $url);
             })->first();
 
         // Check if permission exists
@@ -35,7 +41,7 @@ class ManagePermission
 
         // Check for list permission
         if ($permission->list == 1) {
-            $canAccess = true; 
+            $canAccess = true;
         }
 
         if ($url == $url) {

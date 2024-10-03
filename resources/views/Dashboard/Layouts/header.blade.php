@@ -447,8 +447,7 @@
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar avatar-online">
-                                            <img src="/assets/img/avatars/1.png" alt
-                                                class="h-auto rounded-circle" />
+                                            <img src="/assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
@@ -508,7 +507,7 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/admin/logout">
+                            <a class="dropdown-item" href="{{ route('logout') }}">
                                 <i class="ti ti-logout me-2 ti-sm"></i>
                                 <span class="align-middle">Log Out</span>
                             </a>

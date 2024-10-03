@@ -53,8 +53,7 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth.admin' => \App\Http\Middleware\Dashboard\AdminAuthenticate::class,
-        'auth.user' => \App\Http\Middleware\UserDashboard\UserAuthenticate::class,
+        'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -65,5 +64,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'manage.permission' => \App\Http\Middleware\Dashboard\Managepermission::class,
+        'auth.user' => \App\Http\Middleware\UserDashboard\UserAuthenticate::class,
     ];
 }
