@@ -7,7 +7,6 @@ use App\Models\Company as dbcompany;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class CompanyController extends Controller
 {
@@ -137,18 +136,19 @@ class CompanyController extends Controller
 
     public function exportPDF()
     {
-        ini_set('memory_limit', '20480M');
-        ini_set('max_execution_time', 1000);
+        ini_set('memory_limit', '1024M');
+        set_time_limit(1200);
 
         $pdf = new Dompdf();
-        $allHtml = '';
 
-        dbcompany::chunk(500, function ($companies) use (&$allHtml) {
-            $html = view('Dashboard.Company.pdf', compact('companies'))->render();
-            $allHtml .= $html;
+        $html = '';
+
+        dbcompany::chunk(100, function ($companies) use (&$html) {
+            $html .= view('Dashboard.Company.pdf', compact('companies'))->render();
         });
 
-        $pdf->loadHtml($allHtml);
+        $pdf->loadHtml($html);
+
         $pdf->setPaper('A4', 'landscape');
         $pdf->render();
 
@@ -173,7 +173,7 @@ class CompanyController extends Controller
 
                 while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                     dbcompany::create([
-                        'id' => $data[0],
+                        'id'=> $data[0],
                         'c_name' => $data[1],
                         'c_email' => $data[2],
                         'c_phone_no' => $data[3],
@@ -184,10 +184,9 @@ class CompanyController extends Controller
                 }
                 fclose($handle);
             }
-
-            return response()->json(['success' => 'Data imported successfully!']);
+            return redirect()->route('company')->with('success' , 'CSV File Imported Succeccfully.');
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while importing the CSV file' . $e->getMessage()], 500);
+            return redirect()->route('company')->with('error' , 'Error:'.$e->getMessage());
         }
     }
 }
